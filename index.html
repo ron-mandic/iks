@@ -3,18 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="stylesheet" href="./src/index.scss" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="src/index.scss" />
     <title>Internationale Fl&uuml;chtlingsbewegungen - IKS</title>
   </head>
   <body>
     <div id="app">
       <div id="ui">
-        <h1>Please select country</h1>
+        <div
+          class="block"
+          style="
+            position: relative;
+            width: 400px;
+            height: 800px;
+            background-color: rgba(10, 10, 10, 0.75);
+            border-radius: 1rem;
+            backdrop-filter: blur(1rem);
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: translate 0.5s ease-in-out;
+            pointer-events: auto;
+            overflow-y: scroll;
+          "
+        >
+          <div class="content">
+            <h1 style="visibility: hidden">...</h1>
+            <div class="image"></div>
+            <div class="text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque
+              eligendi est exercitationem illo, iure magnam magni mollitia neque
+              officia omnis quae quisquam? Doloremque hic illo pariatur quia
+              reiciendis velit vero! Aperiam cupiditate, ea, eius facere facilis
+              illo magnam nisi, non omnis quaerat quas quasi quo repellat
+              sapiente sed voluptates voluptatum.
+            </div>
+            <div class="image"></div>
+            <div class="text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque
+              eligendi est exercitationem illo, iure magnam magni mollitia neque
+              officia omnis quae quisquam? Doloremque hic illo pariatur quia
+              reiciendis velit vero! Aperiam cupiditate, ea, eius facere facilis
+              illo magnam nisi, non omnis quaerat quas quasi quo repellat
+              sapiente sed voluptates voluptatum.
+            </div>
+            <div class="image"></div>
+            <div class="text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque
+              eligendi est exercitationem illo, iure magnam magni mollitia neque
+              officia omnis quae quisquam? Doloremque hic illo pariatur quia
+              reiciendis velit vero! Aperiam cupiditate, ea, eius facere facilis
+              illo magnam nisi, non omnis quaerat quas quasi quo repellat
+              sapiente sed voluptates voluptatum.
+            </div>
+          </div>
+          <a href="/iks/nested/" style="margin-top: 2rem">Erfahre mehr</a>
+        </div>
       </div>
       <div id="globe"></div>
     </div>
 
-    <script type="module" src="./src/index.ts"></script>
+    <script type="module" src="src/index.ts"></script>
   </body>
 </html>

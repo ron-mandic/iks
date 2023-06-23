@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@types/alpinejs": "^3.7.1",
 		"@types/d3": "^7.4.0",
+		"@types/node": "^20.3.1",
 		"@types/three": "^0.152.1",
 		"sass": "^1.63.4",
 		"typescript": "^5.0.2",

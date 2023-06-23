@@ -1,232 +1,259 @@
 import { ConfigOptions, GlobeInstance } from 'globe.gl';
 import * as Three from 'three';
-import * as d3 from 'd3';
-import { $ } from '../functions.ts';
+import { $, funcGetArcsData } from '../functions.ts';
+import {
+  ARC_COLOR,
+  ARC_STROKE_WIDTH,
+  ARC_TRANSITION_DURATION,
+  EARTH_DEFAULT_ASYLUM_COUNTRIES_ISO3,
+  EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3,
+  GLOBE_BACKGROUND_IMAGE_PATH,
+  GLOBE_BUMP_IMAGE_PATH,
+  GLOBE_GEO_JSON_PATH,
+  GLOBE_IMAGE_8K_PATH,
+  GLOBE_TEXTURE_PATH,
+  objOriginCountries,
+  POLYGON_ALTITUDE,
+  POLYGON_COLOR_CAP_ASYLUM_COUNTRY,
+  POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+  POLYGON_COLOR_SIDE,
+  POLYGON_COLOR_STROKE,
+  RING_ALTITUDE,
+  ZOOM_POV_MAX,
+} from '../constants.ts';
+import { IGeoJSON, IGeoJSONFeature, IArc } from '../interfaces.ts';
 
 export class Earth {
   world: GlobeInstance | null;
   Three: Three.WebGLRenderer | null;
   objConfigOptions: ConfigOptions | undefined;
+  objCountriesJSON: IGeoJSON | null;
+  arrDefaultCountriesISO3: string[];
 
-  constructor(selector: string, configOptions?: ConfigOptions) {
+  selectedCountry: string | null;
+
+  constructor(
+    selector: string,
+    arrDefaultCountriesISO3: string[],
+    configOptions?: ConfigOptions
+  ) {
     this.world = null;
     this.Three = null;
-    if (configOptions) this.objConfigOptions = configOptions;
+    this.objConfigOptions = configOptions;
+    this.objCountriesJSON = null;
+    this.arrDefaultCountriesISO3 = arrDefaultCountriesISO3;
 
-    this.onLoad(selector);
-    this.onResize();
+    this.selectedCountry = null;
+
+    (async () => {
+      try {
+        await this.render(selector);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
   }
 
-  async configure() {
-    const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
-    const getVal = (feat: any) =>
-      feat.properties.gdp_md / Math.max(1e5, feat.properties.pop_est);
-    const countries = await fetch('./data/custom.geo.medium.json').then((res) =>
-      res.json()
-    );
+  // Initialization #################################################################################
+  preconfigure() {
+    this.preconfigurePolygons();
+    this.preconfigureArcs();
+    this.preconfigureRings();
 
-    // Codes of Syria, Afghanistan, South Sudan, Myanmar, DR Congo, Sudan, Somalia, Central African Republic, Eritrea, Nigeria, Iraq, Burundi, Vietnam
-    const arrayISO3Countries = [
-      'SYR',
-      'AFG',
-      'SSD',
-      'MMR',
-      'COD',
-      'SDN',
-      'SOM',
-      'CAF',
-      'ERI',
-      'NGA',
-      'IRQ',
-      'BDI',
-      'VNM',
-    ];
+    this.customize();
 
-    // @ts-ignore
-    this.world!.backgroundImageUrl('./night-sky.max.darker.png')
-      .lineHoverPrecision(0)
-      .polygonsData(
-        countries.features.filter((d: any) =>
-          arrayISO3Countries.includes(d.properties.iso_a3)
-        )
+    this.world!.pointOfView({ altitude: 4 }, 5500);
+  }
+
+  preconfigurePolygons() {
+    this.world!.polygonsData(
+      this.objCountriesJSON!.features.filter((d: IGeoJSONFeature) =>
+        this.arrDefaultCountriesISO3.includes(d.properties!.iso_a3)
       )
-      .polygonAltitude(0.0125)
-      .polygonCapColor((feat) => colorScale(getVal(feat)))
-      .polygonStrokeColor(() => '#999776')
-      .polygonSideColor(() => 'rgba(0, 100, 0, 0.15)')
-      .onZoom((pov) => {
-        if (pov.altitude > 5) {
-          this.world!.polygonCapColor((_) => 'transparent').polygonStrokeColor(
-            () => false
-          );
-        } else {
-          this.world!.polygonCapColor((d) =>
-            colorScale(getVal(d))
-          ).polygonStrokeColor(() => '#999776');
-        }
-      })
-      .polygonsTransitionDuration(300)
-      .onPolygonClick((d, event, { lng, lat }) => {
-        this.world?.pointOfView({ lat, lng, altitude: 1 }, 2000);
-        // @ts-ignore
-        $('h1')!.innerHTML = d.properties!.admin;
-
-        /* const N = 10;
-        const gData = [...Array(N).keys()].map(() => ({
-          lat: (Math.random() - 0.5) * 180,
-          lng: (Math.random() - 0.5) * 360,
-          size: Math.random() * 150,
-          color: ['red', 'white', 'blue', 'green'][
-            Math.round(Math.random() * 3)
-          ],
-        }));
-        this.world?.hexBinPointsData(gData); */
-
-        const N = 10;
-        const arcsData = [...Array(N).keys()].map(() => ({
-          startLat: 34.51059334835744,
-          startLng: 39.329231898597875,
-          endLat: (Math.random() - 0.5) * 180,
-          endLng: (Math.random() - 0.5) * 360,
-          color: '#FFFCC4',
-        }));
-        this.world?.arcsData(arcsData);
-
-        /* const N_PATHS = 10;
-        const pathData = [...Array(N_PATHS).keys()].map(() => {
-          let lat = (Math.random() - 0.5) * 90;
-          let lng = (Math.random() - 0.5) * 360;
-          let alt = 0;
-
-          return [
-            [34.51059334835744, 39.329231898597875, alt],
-            [(Math.random() - 0.5) * 90, (Math.random() - 0.5) * 360, alt],
-          ];
-        });
-        this.world?.pathsData(pathData);
-
-        /* Gen random data
-        const N = 2;
-        const ringsData = [...Array(N).keys()].map(() => ({
-          lat: 34.51059334835744,
-          lng: 39.329231898597875,
-          maxR: 3,
-          propagationSpeed: 1.5,
-          repeatPeriod: 1600,
-        }));
-        this.world?.ringsData(ringsData); */
-      });
-
-    // this.world!.showGlobe(true).showAtmosphere(true);
-
-    const markerSvg = `<svg viewBox="-4 0 36 36">
-    <path fill="currentColor" d="M14,0 C21.732,0 28,5.641 28,12.6 C28,23.963 14,36 14,36 C14,36 0,24.064 0,12.6 C0,5.641 6.268,0 14,0 Z"></path>
-    <circle fill="transparent" cx="14" cy="14" r="7"></circle>
-  </svg>`;
-
-    /* const N = 10;
-    const gData = [...Array(N).keys()].map(() => ({
-      lat: (Math.random() - 0.5) * 180,
-      lng: (Math.random() - 0.5) * 360,
-      size: 7 + Math.random() * 30,
-      color: ['red', 'white', 'blue', 'green'][Math.round(Math.random() * 3)],
-    }));
-    this.world!.htmlElementsData(gData).htmlElement((d) => {
-      const el = document.createElement('div');
-      el.innerHTML = markerSvg;
-      el.style.color = d.color;
-      el.style.width = `${d.size}px`;
-
-      el.style.pointerEvents = 'auto';
-      el.style.cursor = 'pointer';
-      el.onclick = () => console.info(d);
-      return el;
-    }); */
-
-    this.world!.arcColor('color')
-      .arcDashLength(() => Math.random())
-      .arcAltitudeAutoScale(0.5)
-      .arcStroke(0.25)
-      .arcAltitude(0.325)
-      .arcLabel(() => "I'm an arc")
-      .arcsTransitionDuration(2000)
-      // .arcDashGap(() => 200) -> make it look like it is animated
-      .arcDashAnimateTime(() => 4000);
-
-    this.world!.pathColor(
-      () => ['rgba(0,0,255,0.6)', 'rgba(255,0,0,0.6)'] // gradient
     )
-      .pathStroke(2)
-      .pathTransitionDuration(1000);
+      .polygonAltitude(POLYGON_ALTITUDE)
+      .polygonStrokeColor(() => POLYGON_COLOR_STROKE)
+      .polygonSideColor(() => POLYGON_COLOR_SIDE)
+      .polygonsTransitionDuration(0)
+      // @ts-ignore
+      .polygonCapColor((d: IGeoJSONFeature) => {
+        if (
+          EARTH_DEFAULT_ASYLUM_COUNTRIES_ISO3.includes(d.properties!.iso_a3)
+        ) {
+          return POLYGON_COLOR_CAP_ASYLUM_COUNTRY;
+        }
 
-    this.world?.polygonSideColor(() => 'rgba(0, 0, 0, 0.15)');
+        return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
+      })
+      // @ts-ignore
+      .onPolygonClick((d: IGeoJSONFeature, _, { lng, lat }) => {
+        if (EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3.includes(d.properties.iso_a3)) {
+          this.world?.pointOfView({ lat, lng, altitude: 1 }, 2000);
+          if (
+            EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3.includes(d.properties!.iso_a3)
+          )
+            this.selectedCountry = d.properties!.iso_a3;
 
-    const colorInterpolator = (t) => `rgba(255,100,50,${Math.sqrt(1 - t)})`;
+          let modal = $('div.block');
+          modal.style.translate = '0 0';
+
+          let headingElement = $('h1');
+          // @ts-ignore
+          headingElement.style.visibility = 'visible';
+          headingElement!.innerHTML = d.properties!.admin;
+
+          this.world!.arcsData(funcGetArcsData(this.selectedCountry as string));
+          this.world!.polygonsData(
+            this.objCountriesJSON!.features.filter(
+              (d: IGeoJSONFeature) =>
+                this.arrDefaultCountriesISO3.includes(d.properties!.iso_a3) ||
+                objOriginCountries[
+                  this.selectedCountry as keyof typeof objOriginCountries
+                ].asylumCountriesISO3.includes(d.properties!.iso_a3)
+            )
+          );
+        }
+      });
+  }
+
+  preconfigureArcs() {
+    this.world!.lineHoverPrecision(0)
+      .arcColor('color')
+      .arcStroke(ARC_STROKE_WIDTH)
+      .arcLabel(() => '')
+      // @ts-ignore
+      .arcAltitude((d: IArc) => {
+        if (
+          d.name === 'Jordan' ||
+          d.name === 'Iraq' ||
+          d.name === 'Lebanon' ||
+          d.name === 'Egypt'
+        )
+          return 0.025;
+
+        if (d.name === 'United States of America') {
+          return 0.25;
+        }
+
+        return 0.075;
+      })
+      .arcsTransitionDuration(ARC_TRANSITION_DURATION);
+  }
+
+  preconfigureRings() {
+    const colorInterpolator = (t: number) =>
+      `rgba(255,115,115,${Math.sqrt(1 - t)})`;
     this.world!.ringColor(() => colorInterpolator)
-      .ringMaxRadius('maxR')
+      .ringMaxRadius('maxRadius')
       .ringPropagationSpeed('propagationSpeed')
-      .ringAltitude(0.015)
+      .ringAltitude(RING_ALTITUDE)
       .ringRepeatPeriod('repeatPeriod');
+  }
 
+  async render(selector: string) {
+    try {
+      this.onContentLoaded(selector);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  assign() {
+    this.Three = this.world!.renderer();
+  }
+
+  customize() {
     this.world!.controls().autoRotate = true;
     this.world!.controls().autoRotateSpeed = 0.035;
+
+    const globeMaterial = this.world!.globeMaterial();
+    // @ts-ignore
+    globeMaterial.bumpScale = 4;
+    // @ts-ignore
+    const texture = new Three.TextureLoader().load(
+      GLOBE_TEXTURE_PATH,
+      (texture) => {
+        // @ts-ignore
+        globeMaterial.specularMap = texture;
+        // @ts-ignore
+        globeMaterial.specular = new Three.Color('grey');
+        // @ts-ignore
+        globeMaterial.shininess = 10;
+      }
+    );
+
+    setTimeout(() => {
+      // wait for scene to be populated (asynchronously)
+      const directionalLight = this.world!.scene().children.find(
+        (obj3d) => obj3d.type === 'DirectionalLight'
+      );
+      directionalLight && directionalLight.position.set(2, 1, 1);
+    });
   }
 
-  onLoad(selector: string) {
+  // Events #################################################################################
+
+  onContentLoaded(selector: string) {
     window.addEventListener('DOMContentLoaded', async () => {
       await import('globe.gl').then(async (module) => {
-        this.world = module.default({
-          animateIn: true,
-          waitForGlobeReady: true,
-          rendererConfig: {
-            antialias: true,
-          },
-        })(document.querySelector(selector)!);
-        this.world
-          .globeImageUrl('./8k_earth_daymap.jpg')
-          .bumpImageUrl('./topology.min.png')
-          .pointOfView({ altitude: 4 }, 5000);
-
-        await this.configure();
-
-        setTimeout(() => this.world!.polygonsTransitionDuration(4000), 3000);
-
-        const globeMaterial = this.world!.globeMaterial();
-        globeMaterial.bumpScale = 4;
-        const texture = new Three.TextureLoader().load(
-          './earth-water.low.png',
-          (texture) => {
-            globeMaterial.specularMap = texture;
-            globeMaterial.specular = new Three.Color('grey');
-            globeMaterial.shininess = 10;
-          }
+        this.world = module.default(this.objConfigOptions)(
+          document.querySelector(selector)!
         );
-
-        setTimeout(() => {
-          // wait for scene to be populated (asynchronously)
-          const directionalLight = this.world!.scene().children.find(
-            (obj3d) => obj3d.type === 'DirectionalLight'
-          );
-          directionalLight && directionalLight.position.set(1, 1, 1); // change light position to see the specularMap's effect
-        });
-
         this.world
-          .hexBinPointLat((d) => d.lat)
-          .hexBinPointLng((d) => d.lng)
-          .hexBinPointWeight((d) => d.size)
-          .hexAltitude(({ sumWeight }) => sumWeight * 0.0025);
+          .globeImageUrl(GLOBE_IMAGE_8K_PATH)
+          .bumpImageUrl(GLOBE_BUMP_IMAGE_PATH)
+          .backgroundImageUrl(GLOBE_BACKGROUND_IMAGE_PATH);
 
-        this.Three = this.world.renderer();
+        this.onReady();
       });
+
+      this.objCountriesJSON = await fetch(GLOBE_GEO_JSON_PATH).then((res) =>
+        res.json()
+      );
+    });
+  }
+
+  onReady() {
+    this.world!.onGlobeReady(async () => {
+      this.preconfigure();
+      this.assign();
+
+      this.onResize();
+      this.onZoom();
     });
   }
 
   onResize() {
-    // resize canvas on window resize
     window.addEventListener('resize', () => {
       if (!this.world) return;
       this.world!.width(window.innerWidth);
       this.world!.height(window.innerHeight);
+    });
+  }
+
+  onZoom() {
+    this.world!.onZoom((pov) => {
+      if (pov.altitude > ZOOM_POV_MAX) {
+        this.world!.polygonCapColor((_) => 'transparent').polygonStrokeColor(
+          () => false
+        );
+        return;
+      }
+
+      // @ts-ignore
+      this.world!.polygonCapColor((d: IGeoJSONFeature) => {
+        if (this.selectedCountry === d.properties!.iso_a3) {
+          return '#26261e';
+        }
+
+        if (
+          EARTH_DEFAULT_ASYLUM_COUNTRIES_ISO3.includes(d.properties!.iso_a3)
+        ) {
+          return POLYGON_COLOR_CAP_ASYLUM_COUNTRY;
+        }
+
+        return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
+      }).polygonStrokeColor(() => '#999776');
     });
   }
 }

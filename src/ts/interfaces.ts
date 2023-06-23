@@ -10,6 +10,7 @@ interface IGeoJSONFeature {
   properties: {
     abbrev: string;
     admin: string;
+    adm0_a3: string;
     continent: string;
     economy: string;
     gdp_md: number;

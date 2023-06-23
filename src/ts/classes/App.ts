@@ -1,5 +1,5 @@
 import { Earth } from './Earth.ts';
-import { EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3 } from '../constants.ts';
+import { EARTH_CONFIG_OPTIONS } from '../constants.ts';
 
 export class App {
   body: HTMLBodyElement | null;
@@ -9,25 +9,13 @@ export class App {
   constructor() {
     this.body = null;
     this.appHTML = null;
-    this.globe = new Earth('#globe', EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3, {
-      animateIn: false,
-      waitForGlobeReady: true,
-      rendererConfig: {
-        antialias: true,
-        alpha: true,
-      },
-    });
+    this.globe = new Earth('#globe', EARTH_CONFIG_OPTIONS);
   }
 
   init() {
     window.addEventListener('DOMContentLoaded', () => {
       this.body = document.querySelector('body')!;
       this.appHTML = document.querySelector('#app')!;
-      this.log();
     });
-  }
-
-  log() {
-    console.log(this.globe);
   }
 }

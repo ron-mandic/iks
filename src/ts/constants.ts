@@ -3,7 +3,8 @@ const GLOBE_IMAGE_2K_PATH = './2k_earth_daymap.jpg';
 const GLOBE_IMAGE_8K_PATH = './8k_earth_daymap.jpg';
 const GLOBE_BUMP_IMAGE_PATH = './topology.min.png';
 const GLOBE_BACKGROUND_IMAGE_PATH = './night-sky.max.darker.png';
-const GLOBE_GEO_JSON_PATH = './data/custom.geo.medium.json';
+const GLOBE_GEO_LOW_JSON_PATH = './data/custom.geo.low.json';
+const GLOBE_GEO_MEDIUM_JSON_PATH = './data/custom.geo.medium.json';
 const GLOBE_TEXTURE_PATH = './earth-water.low.png';
 
 // Polygon #################################################################################
@@ -26,7 +27,15 @@ const ZOOM_POV_MIN = 0.1;
 const ZOOM_POV_MAX = 5;
 
 // Other #################################################################################
-const EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3 = ['SYR', 'AFG', 'SSD', 'MMR', 'COD'];
+const EARTH_CONFIG_OPTIONS = {
+  animateIn: false,
+  waitForGlobeReady: true,
+  rendererConfig: {
+    antialias: true,
+    alpha: true,
+  },
+};
+const EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3 = ['AFG'];
 const EARTH_DEFAULT_ASYLUM_COUNTRIES_ISO3 = [
   'LBN',
   'JOR',
@@ -331,7 +340,8 @@ export {
   GLOBE_IMAGE_8K_PATH,
   GLOBE_BUMP_IMAGE_PATH,
   GLOBE_BACKGROUND_IMAGE_PATH,
-  GLOBE_GEO_JSON_PATH,
+  GLOBE_GEO_LOW_JSON_PATH,
+  GLOBE_GEO_MEDIUM_JSON_PATH,
   GLOBE_TEXTURE_PATH,
   POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
   POLYGON_COLOR_CAP_ASYLUM_COUNTRY,
@@ -345,6 +355,7 @@ export {
   ZOOM_POV_MIN,
   ZOOM_POV_MAX,
   objOriginCountries,
+  EARTH_CONFIG_OPTIONS,
   EARTH_DEFAULT_ORIGIN_COUNTRIES_ISO3,
   EARTH_DEFAULT_ASYLUM_COUNTRIES_ISO3,
 };

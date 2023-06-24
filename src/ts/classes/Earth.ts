@@ -1,21 +1,32 @@
 import Globe, { ConfigOptions, GlobeInstance } from 'globe.gl';
 import * as THREE from 'three';
 import {
-  ARC_STROKE_WIDTH,
-  ARC_TRANSITION_DURATION,
+  d0,
+  d1,
+  d2,
+  d3,
+  d4,
   GLOBE_BACKGROUND_IMAGE_PATH,
   GLOBE_BUMP_IMAGE_PATH,
+  GLOBE_CAP_MATERIAL_PATH,
   GLOBE_GEO_LOW_JSON_PATH,
   GLOBE_IMAGE_8K_PATH,
-  GLOBE_TEXTURE_PATH,
-  POLYGON_ALTITUDE,
+  objOriginCountries,
   POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
-  POLYGON_COLOR_SIDE,
-  POLYGON_COLOR_STROKE,
   RING_ALTITUDE,
   ZOOM_POV_MAX,
 } from '../constants.ts';
-import { IArc, IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
+import { IGeoCoords, IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
+import {
+  Earth_ConfigureArcs,
+  Earth_ConfigurePaths,
+  Earth_ConfigurePoints,
+  Earth_ConfigurePolygons,
+  Earth_ConfigureRings,
+  Earth_Customize,
+  Earth_FilterData,
+  Earth_OnResize,
+} from '../functions.ts';
 
 export class Earth {
   world: GlobeInstance | null;
@@ -27,26 +38,28 @@ export class Earth {
   capTexture: THREE.Texture | null;
   zoomedOut: boolean;
 
+  arr;
+
   constructor(selector: string, configOptions?: ConfigOptions) {
     this.world = Globe(configOptions)(document.querySelector(selector)!)
       .globeImageUrl(GLOBE_IMAGE_8K_PATH)
       .bumpImageUrl(GLOBE_BUMP_IMAGE_PATH)
       .backgroundImageUrl(GLOBE_BACKGROUND_IMAGE_PATH);
     this.THREE = this.world!.renderer();
-    this.capTexture = new THREE.TextureLoader().load(
-      './mymind-XUlsF9LYeVk-unsplash.jpg'
-    );
+    this.capTexture = new THREE.TextureLoader().load(GLOBE_CAP_MATERIAL_PATH);
 
     this.data = null;
     this.selectedCountry = null;
 
     this.zoomedOut = false;
 
+    this.arr = [];
+
     this.world!.onGlobeReady(async () => {
       fetch(GLOBE_GEO_LOW_JSON_PATH)
         .then((response) => response.json())
         .then((data: IGeoJSON) => this.render(data))
-        .catch((error) => console.error('Error:', error));
+        .catch((error) => console.error('onGlobeReady: ', error));
     });
   }
 
@@ -54,124 +67,114 @@ export class Earth {
   render(data: IGeoJSON) {
     this.data = data;
     this.preconfigure();
-    this.populate();
+    this.setPolygons();
 
     this.onResize();
     this.onZoom();
 
     this.initEvents();
 
+    this.world?.pointsData([
+      {
+        lat: objOriginCountries.COD.asylumCountries[0].endLat,
+        lng: objOriginCountries.COD.asylumCountries[0].endLng,
+        color: 'red',
+        size:
+          (objOriginCountries.COD.asylumCountries[0].asylumSeekers /
+            objOriginCountries.COD.refugees) *
+          0.375,
+      },
+      {
+        lat: objOriginCountries.COD.asylumCountries[1].endLat,
+        lng: objOriginCountries.COD.asylumCountries[1].endLng,
+        color: 'red',
+        size:
+          (objOriginCountries.COD.asylumCountries[1].asylumSeekers /
+            objOriginCountries.COD.refugees) *
+          0.375,
+      },
+      {
+        lat: objOriginCountries.COD.asylumCountries[2].endLat,
+        lng: objOriginCountries.COD.asylumCountries[2].endLng,
+        color: 'red',
+        size:
+          (objOriginCountries.COD.asylumCountries[2].asylumSeekers /
+            objOriginCountries.COD.refugees) *
+          0.375,
+      },
+      {
+        lat: objOriginCountries.COD.asylumCountries[3].endLat,
+        lng: objOriginCountries.COD.asylumCountries[3].endLng,
+        color: 'red',
+        size:
+          (objOriginCountries.COD.asylumCountries[3].asylumSeekers /
+            objOriginCountries.COD.refugees) *
+          0.375,
+      },
+      {
+        lat: objOriginCountries.COD.asylumCountries[4].endLat,
+        lng: objOriginCountries.COD.asylumCountries[4].endLng,
+        color: 'red',
+        size:
+          (objOriginCountries.COD.asylumCountries[4].asylumSeekers /
+            objOriginCountries.COD.refugees) *
+          0.375,
+      },
+    ]);
+
+    this.world?.pathsData(d4);
+
+    const N = 8;
+    const gData = [...Array(N).keys()].map(() => ({
+      lat: objOriginCountries.COD.lat,
+      lng: objOriginCountries.COD.lng,
+      maxRadius: 4,
+      propagationSpeed: 1.25,
+      repeatPeriod: 800,
+    }));
+
+    this.world!.ringsData(gData);
+
     console.log(this);
   }
 
-  populate() {
-    this.world!.polygonsData(
-      this.data!.features.filter((d) => {
-        return (
-          d.properties.name === 'United States of America' ||
-          d.properties.name === 'Russia'
-        );
-      })
-    );
+  initEvents() {
+    // this.world?.onPolygonClick();
+    // this.world?.onGlobeClick();
+
+    this.world!.polygonCapColor(() => POLYGON_COLOR_CAP_ORIGIN_COUNTRY);
+    /* .polygonCapMaterial((_) => {
+      return new THREE.MeshPhongMaterial({
+        map: this.capTexture,
+        shininess: 10,
+        specular: new THREE.Color(0xffffff),
+      });
+    }); */
   }
 
+  // Customization #################################################################################
   preconfigure() {
-    this.preconfigurePolygons();
-    this.preconfigureArcs();
-    this.preconfigureRings();
+    Earth_ConfigurePolygons(this.world!);
+    Earth_ConfigureArcs(this.world!);
+    Earth_ConfigurePaths(this.world!);
+    Earth_ConfigureRings(this.world!);
+    Earth_ConfigurePoints(this.world!);
 
-    this.customize();
+    Earth_Customize(this.world!);
 
     this.world!.pointOfView({ altitude: 4 }, 5500);
   }
 
-  preconfigurePolygons() {
-    this.world!.polygonAltitude(POLYGON_ALTITUDE)
-      .polygonStrokeColor(() => POLYGON_COLOR_STROKE)
-      .polygonSideColor(() => POLYGON_COLOR_SIDE)
-      .polygonsTransitionDuration(0)
-      // @ts-ignore
-      .polygonCapColor((_: IGeoJSONFeature) => {
-        return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
-      });
-  }
-
-  preconfigureArcs() {
-    this.world!.lineHoverPrecision(0)
-      .arcColor('color')
-      .arcStroke(ARC_STROKE_WIDTH)
-      .arcLabel(() => '')
-      // @ts-ignore
-      .arcAltitude((d: IArc) => 0.075)
-      .arcsTransitionDuration(ARC_TRANSITION_DURATION);
-  }
-
-  preconfigureRings() {
-    this.world!.ringColor(
-      (t: number) => `rgba(255,115,115,${Math.sqrt(1 - t)})`
-    )
-      .ringMaxRadius('maxRadius')
-      .ringPropagationSpeed('propagationSpeed')
-      .ringAltitude(RING_ALTITUDE)
-      .ringRepeatPeriod('repeatPeriod');
-  }
-
-  customize() {
-    this.world!.controls().autoRotate = true;
-    this.world!.controls().autoRotateSpeed = 0.035;
-
-    const globeMaterial: THREE.Material = this.world!.globeMaterial();
-    // @ts-ignore
-    globeMaterial.bumpScale = 4;
-    // @ts-ignore
-    const texture = new THREE.TextureLoader().load(
-      GLOBE_TEXTURE_PATH,
-      (texture) => {
-        // @ts-ignore
-        globeMaterial.specularMap = texture;
-        // @ts-ignore
-        globeMaterial.specular = new THREE.Color('grey');
-        // @ts-ignore
-        globeMaterial.shininess = 10;
-      }
-    );
-
-    setTimeout(() => {
-      // wait for scene to be populated (asynchronously)
-      const directionalLight = this.world!.scene().children.find(
-        (obj3d) => obj3d.type === 'DirectionalLight'
-      );
-      directionalLight && directionalLight.position.set(2, 1, 1);
-    });
+  // Setter #################################################################################
+  setPolygons() {
+    /* this.world!.polygonsData(
+      Earth_FilterData(this.data!, 'default') as object[]
+    ); */
   }
 
   // Events #################################################################################
-  initEvents() {
-    this.world?.onPolygonClick((polygon: IGeoJSONFeature) => {
-      console.log(polygon.properties);
-    });
-
-    this.world?.onGlobeClick((coords, _) => {
-      console.log(coords);
-    });
-
-    this.world
-      ?.polygonCapColor(() => '#000')
-      .polygonCapMaterial((_) => {
-        return new THREE.MeshPhongMaterial({
-          map: this.capTexture,
-          shininess: 10,
-          specular: new THREE.Color(0xffffff),
-        });
-      });
-  }
-
   onResize() {
-    window.addEventListener('resize', () => {
-      if (!this.world) return;
-      this.world!.width(window.innerWidth);
-      this.world!.height(window.innerHeight);
-    });
+    window.addEventListener('resize', () => Earth_OnResize(this.world!));
   }
 
   onZoom() {
@@ -186,17 +189,18 @@ export class Earth {
       } else {
         // @ts-ignore
         if (this.zoomedOut)
-          this.world!.polygonCapColor((d: IGeoJSONFeature) => {
+          // @ts-ignore
+          this.world!().polygonStrokeColor(() => '#999776');
+        /* .polygonCapColor((d: IGeoJSONFeature) => {
             return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
-          })
-            .polygonStrokeColor(() => '#999776')
-            .polygonCapMaterial((_) => {
+          }) */
+        /* .polygonCapMaterial((_) => {
               return new THREE.MeshPhongMaterial({
                 map: this.capTexture,
                 shininess: 10,
                 specular: new THREE.Color(0xffffff),
               });
-            });
+            }); */
         this.zoomedOut = false;
       }
     });

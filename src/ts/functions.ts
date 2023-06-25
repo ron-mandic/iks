@@ -17,7 +17,12 @@ import {
   IGeoJSON,
   IGeoJSONFeature,
 } from './interfaces.ts';
-import { GLOBE_DATA_ARCS } from './data.ts';
+import {
+  GLOBE_DATA_ARCS,
+  GLOBE_DATA_PATHS,
+  GLOBE_DATA_POINTS,
+  GLOBE_DATA_RINGS,
+} from './data.ts';
 import {
   DICT_GLOBE_ORIGINS,
   DICT_GLOBE_AFG,
@@ -28,6 +33,7 @@ import {
 } from './dictionary.ts';
 import { EWikiData } from './enum.ts';
 import { Earth } from './classes/Earth.ts';
+import { UI } from './classes/UI.ts';
 
 // General #################################################################################
 
@@ -99,10 +105,10 @@ function Earth_ConfigureArcs(world: GlobeInstance) {
 
 function Earth_ConfigurePaths(world: GlobeInstance) {
   world
-    .pathStroke(5.5)
+    .pathStroke(8.5)
     .pathPointAlt(0)
     .pathColor(() => ['#a4161a', '#bf0603'])
-    .pathTransitionDuration(2500);
+    .pathTransitionDuration(1500);
 }
 
 function Earth_ConfigureRings(world: GlobeInstance) {
@@ -115,7 +121,11 @@ function Earth_ConfigureRings(world: GlobeInstance) {
 }
 
 function Earth_ConfigurePoints(world: GlobeInstance) {
-  world.pointAltitude('size').pointsTransitionDuration(1000);
+  world
+    .pointAltitude('size')
+    .pointsTransitionDuration(1000)
+    .pointColor('color')
+    .pointRadius('radius');
 }
 
 function Earth_Customize(world: GlobeInstance) {
@@ -143,6 +153,15 @@ function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
               d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
+    // Special case for input option 'Syria:mr'
+    case `${EWikiData.SYRIA}:mr`: {
+      return data.features.filter(
+        (d: IGeoJSONFeature) =>
+          (d.properties?.wikidataid in DICT_GLOBE_SYR ||
+            d.properties?.wikidataid in DICT_GLOBE_ORIGINS) &&
+          d.properties?.wikidataid !== EWikiData.SYRIA
+      );
+    }
     case EWikiData.AFGHANISTAN: {
       return !includeOrigins
         ? data.features.filter(
@@ -153,6 +172,15 @@ function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
               d.properties?.wikidataid in DICT_GLOBE_AFG ||
               d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
+    }
+    // Special case for input option 'Afghanistan:mr'
+    case `${EWikiData.AFGHANISTAN}:mr`: {
+      return data.features.filter(
+        (d: IGeoJSONFeature) =>
+          (d.properties?.wikidataid in DICT_GLOBE_AFG ||
+            d.properties?.wikidataid in DICT_GLOBE_ORIGINS) &&
+          d.properties?.wikidataid !== EWikiData.AFGHANISTAN
+      );
     }
     case EWikiData.SOUTH_SUDAN: {
       return !includeOrigins
@@ -165,6 +193,15 @@ function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
               d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
+    // Special case for input option 'South Sudan:mr'
+    case `${EWikiData.SOUTH_SUDAN}:mr`: {
+      return data.features.filter(
+        (d: IGeoJSONFeature) =>
+          (d.properties?.wikidataid in DICT_GLOBE_SSD ||
+            d.properties?.wikidataid in DICT_GLOBE_ORIGINS) &&
+          d.properties?.wikidataid !== EWikiData.SOUTH_SUDAN
+      );
+    }
     case EWikiData.MYANMAR: {
       return !includeOrigins
         ? data.features.filter(
@@ -176,6 +213,15 @@ function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
               d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
+    // Special case for input option 'Myanmar:mr'
+    case `${EWikiData.MYANMAR}:mr`: {
+      return data.features.filter(
+        (d: IGeoJSONFeature) =>
+          (d.properties?.wikidataid in DICT_GLOBE_MMR ||
+            d.properties?.wikidataid in DICT_GLOBE_ORIGINS) &&
+          d.properties?.wikidataid !== EWikiData.MYANMAR
+      );
+    }
     case EWikiData.DR_CONGO: {
       return !includeOrigins
         ? data.features.filter(
@@ -186,6 +232,15 @@ function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
               d.properties?.wikidataid in DICT_GLOBE_COD ||
               d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
+    }
+    // Special case for input option 'DR Congo:mr'
+    case `${EWikiData.DR_CONGO}:mr`: {
+      return data.features.filter(
+        (d: IGeoJSONFeature) =>
+          (d.properties?.wikidataid in DICT_GLOBE_COD ||
+            d.properties?.wikidataid in DICT_GLOBE_ORIGINS) &&
+          d.properties?.wikidataid !== EWikiData.DR_CONGO
+      );
     }
     default: {
       return [];
@@ -203,10 +258,11 @@ function Earth_FilterArcs(key: string, callback?: (arc: IArc) => boolean) {
       ].asylumCountries.filter(callback);
 }
 
-// Events #################################################################################
+// Earth #################################################################################
 function Earth_OnClick(
   earth: Earth,
   polygon: IGeoJSONFeature,
+  // @ts-ignore
   event: MouseEvent,
   coords: IGeoCoords3
 ) {
@@ -218,7 +274,10 @@ function Earth_OnClick(
 
   const { lat, lng } = coords;
   if (earth.selectedCountry in DICT_GLOBE_ORIGINS)
-    earth.world!.pointOfView({ lat, lng, altitude: 0.75 }, 1750);
+    earth.world!.pointOfView({ lat, lng, altitude: 0.675 }, 1750);
+
+  earth.ui.showView(earth.selectedCountry!);
+  earth.ui.animateChart(earth.selectedCountry!);
 
   // console.log(
   //   DICT_COUNTRIES[earth.selectedCountry! as keyof typeof DICT_COUNTRIES]
@@ -237,6 +296,7 @@ function Earth_OnSelect(
   if (key in DICT_GLOBE_ORIGINS) {
     earth
       .world!.polygonsData(Earth_FilterData(earth.data!, key) as object[])
+      .polygonAltitude(POLYGON_ALTITUDE)
       .polygonCapColor(
         // @ts-ignore
         (polygon: IGeoJSONFeature) =>
@@ -265,7 +325,7 @@ function Earth_GetCapColor(
   }
 
   if (key !== polygon.properties.wikidataid && key in DICT_GLOBE_ORIGINS) {
-    return '3a86ff44';
+    return '#3a86ff44';
   }
 }
 
@@ -300,14 +360,85 @@ function Earth_ResetState(
 ) {
   console.log(coords, event);
 
-  earth.selectedCountry = null;
+  if (earth.selectedCountry) earth.selectedCountry = null;
 
-  earth.world!.polygonsData(
-    Earth_FilterData(earth.data!, 'default') as object[]
-  );
+  earth
+    .world!.polygonsData(Earth_FilterData(earth.data!, 'default') as object[])
+    .polygonAltitude(POLYGON_ALTITUDE);
 
   if (!earth.zoomedOut) {
     earth.world!.polygonCapColor(() => POLYGON_COLOR_CAP_ORIGIN_COUNTRY);
+  }
+}
+
+function Earth_DisplayRoutes(key: string, world: GlobeInstance) {
+  world.pointsData(
+    GLOBE_DATA_POINTS[key as keyof typeof GLOBE_DATA_POINTS]!.points
+  );
+  world.pathsData(
+    GLOBE_DATA_PATHS[key as keyof typeof GLOBE_DATA_PATHS]!.paths
+  );
+  world.arcsData(
+    Earth_FilterArcs(key, (arc: IArc) => {
+      return arc.wikidataid === EWikiData.USA;
+    }) as object[]
+  );
+  world
+    .ringsData(GLOBE_DATA_RINGS[key as keyof typeof GLOBE_DATA_RINGS]!.rings)
+    .ringColor(() => (t: number) => `rgba(255,255,255,${Math.sqrt(1 - t)})`)
+    .ringMaxRadius('maxRadius')
+    .ringPropagationSpeed('propagationSpeed')
+    .ringAltitude(RING_ALTITUDE)
+    .ringRepeatPeriod('repeatPeriod');
+}
+
+// UI #################################################################################
+function UI_TriggerCanvas(target: HTMLInputElement, ui: UI) {
+  const earth = ui.parent as Earth;
+  const key = target.getAttribute('data-id')!;
+  const option = target.getAttribute('data-option')!;
+
+  switch (option) {
+    case 'ac': {
+      if (key in DICT_GLOBE_ORIGINS) {
+        earth.world
+          ?.pointsData([])
+          .pathsData([[[]]])
+          .arcsData([])
+          .ringColor(() => 'rgba(0, 0, 0, 0)');
+        // .ringsData([]); Uncommenting it makes the rings disappear after one deselection of the input option
+
+        earth
+          .world!.polygonsData(Earth_FilterData(earth.data!, key) as object[])
+          .polygonAltitude(POLYGON_ALTITUDE)
+          .polygonCapColor(
+            // @ts-ignore
+            (polygon: IGeoJSONFeature) =>
+              Earth_GetCapColor(earth, polygon) ||
+              POLYGON_COLOR_CAP_ORIGIN_COUNTRY
+          )
+          .polygonStrokeColor(() => '#999776');
+      }
+      break;
+    }
+    case 'mr': {
+      if (key in DICT_GLOBE_ORIGINS) {
+        Earth_DisplayRoutes(key, earth.world!);
+
+        earth
+          .world!.polygonsData(
+            Earth_FilterData(earth.data!, `${key}:mr`) as object[]
+          )
+          .polygonAltitude(POLYGON_ALTITUDE)
+          .polygonCapColor(() => '#3a86ff44')
+          .polygonStrokeColor(() => '#999776');
+      }
+      break;
+    }
+    default: {
+      // throw new Error('UI_TriggerCanvas: Invalid option');
+      return;
+    }
   }
 }
 
@@ -331,4 +462,5 @@ export {
   Earth_TurnOnColors,
   Earth_TurnOffColors,
   Earth_ResetState,
+  UI_TriggerCanvas,
 };

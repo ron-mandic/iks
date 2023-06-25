@@ -1,6 +1,8 @@
 import {
   ARC_COLOR,
   POINT_ALTITUDE,
+  POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+  POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
   RING_MAX_RADIUS,
   RING_N_DEFAULT,
   RING_PROPAGATION_SPEED,
@@ -22,7 +24,7 @@ const DATA_REFUGEES_2021_ORIGIN_COUNTRIES =
   DATA_REFUGEES_2021_COD;
 
 const GLOBE_DATA_PATHS = {
-  SYR: {
+  [EWikiData.SYRIA]: {
     wikidataid: EWikiData.SYRIA,
     paths: [
       [
@@ -117,7 +119,7 @@ const GLOBE_DATA_PATHS = {
       ],
     ],
   },
-  AFG: {
+  [EWikiData.AFGHANISTAN]: {
     wikidataid: EWikiData.AFGHANISTAN,
     paths: [
       [
@@ -356,7 +358,7 @@ const GLOBE_DATA_PATHS = {
       ],
     ],
   },
-  SSD: {
+  [EWikiData.SOUTH_SUDAN]: {
     wikidataid: EWikiData.SOUTH_SUDAN,
     paths: [
       [
@@ -515,7 +517,7 @@ const GLOBE_DATA_PATHS = {
       ],
     ],
   },
-  MMR: {
+  [EWikiData.MYANMAR]: {
     wikidataid: EWikiData.MYANMAR,
     paths: [
       [
@@ -712,7 +714,7 @@ const GLOBE_DATA_PATHS = {
       // USA -> Arc
     ],
   },
-  COD: {
+  [EWikiData.DR_CONGO]: {
     wikidataid: EWikiData.DR_CONGO,
     paths: [
       [
@@ -990,7 +992,7 @@ const GLOBE_DATA_PATHS = {
 };
 
 const GLOBE_DATA_ARCS = {
-  SYR: {
+  [EWikiData.SYRIA]: {
     wikidataid: EWikiData.SYRIA,
     name: 'Syria',
     population: 17_637_075,
@@ -1058,7 +1060,7 @@ const GLOBE_DATA_ARCS = {
       },
     ],
   },
-  AFG: {
+  [EWikiData.AFGHANISTAN]: {
     wikidataid: EWikiData.AFGHANISTAN,
     name: 'Afghanistan',
     population: 39_540_689,
@@ -1126,7 +1128,7 @@ const GLOBE_DATA_ARCS = {
       },
     ],
   },
-  SSD: {
+  [EWikiData.SOUTH_SUDAN]: {
     wikidataid: EWikiData.SOUTH_SUDAN,
     name: 'South Sudan',
     population: 11_289_110,
@@ -1194,7 +1196,7 @@ const GLOBE_DATA_ARCS = {
       },
     ],
   },
-  MMR: {
+  [EWikiData.MYANMAR]: {
     wikidataid: EWikiData.MYANMAR,
     name: 'Myanmar',
     population: 54_848_705,
@@ -1262,7 +1264,7 @@ const GLOBE_DATA_ARCS = {
       },
     ],
   },
-  COD: {
+  [EWikiData.DR_CONGO]: {
     wikidataid: EWikiData.DR_CONGO,
     name: 'DR Congo',
     population: 'N/A',
@@ -1333,279 +1335,544 @@ const GLOBE_DATA_ARCS = {
 };
 
 const GLOBE_DATA_POINTS = {
-  SYR: {
+  [EWikiData.SYRIA]: {
     wikidataid: EWikiData.SYRIA,
     points: [
+      // 1
       {
-        lat: GLOBE_DATA_ARCS.SYR.asylumCountries[0].endLat,
-        lng: GLOBE_DATA_ARCS.SYR.asylumCountries[0].endLng,
-        size:
-          (GLOBE_DATA_ARCS.SYR.asylumCountries[0].asylumSeekers /
-            DATA_REFUGEES_2021_SYR) *
-          POINT_ALTITUDE,
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[0].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SYR.asylumCountries[1].endLat,
-        lng: GLOBE_DATA_ARCS.SYR.asylumCountries[1].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[0].endLng,
         size:
-          (GLOBE_DATA_ARCS.SYR.asylumCountries[1].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[0].asylumSeekers /
             DATA_REFUGEES_2021_SYR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 2
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[1].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SYR.asylumCountries[2].endLat,
-        lng: GLOBE_DATA_ARCS.SYR.asylumCountries[2].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[1].endLng,
         size:
-          (GLOBE_DATA_ARCS.SYR.asylumCountries[2].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[1].asylumSeekers /
             DATA_REFUGEES_2021_SYR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 3
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[2].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SYR.asylumCountries[3].endLat,
-        lng: GLOBE_DATA_ARCS.SYR.asylumCountries[3].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[2].endLng,
         size:
-          (GLOBE_DATA_ARCS.SYR.asylumCountries[3].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[2].asylumSeekers /
             DATA_REFUGEES_2021_SYR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 4
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[3].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SYR.asylumCountries[4].endLat,
-        lng: GLOBE_DATA_ARCS.SYR.asylumCountries[4].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[3].endLng,
         size:
-          (GLOBE_DATA_ARCS.SYR.asylumCountries[4].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[3].asylumSeekers /
             DATA_REFUGEES_2021_SYR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 5
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[4].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
+      },
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[4].endLng,
+        size:
+          (GLOBE_DATA_ARCS[EWikiData.SYRIA].asylumCountries[4].asylumSeekers /
+            DATA_REFUGEES_2021_SYR) *
+          POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
       },
     ],
   },
-  AFG: {
+  [EWikiData.AFGHANISTAN]: {
     wikidataid: EWikiData.AFGHANISTAN,
     points: [
+      // 1
       {
-        lat: GLOBE_DATA_ARCS.AFG.asylumCountries[0].endLat,
-        lng: GLOBE_DATA_ARCS.AFG.asylumCountries[0].endLng,
-        size:
-          (GLOBE_DATA_ARCS.AFG.asylumCountries[0].asylumSeekers /
-            DATA_REFUGEES_2021_AFG) *
-          POINT_ALTITUDE,
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[0].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.AFG.asylumCountries[1].endLat,
-        lng: GLOBE_DATA_ARCS.AFG.asylumCountries[1].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[0].endLng,
         size:
-          (GLOBE_DATA_ARCS.AFG.asylumCountries[1].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[0]
+            .asylumSeekers /
             DATA_REFUGEES_2021_AFG) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 2
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[1].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.AFG.asylumCountries[2].endLat,
-        lng: GLOBE_DATA_ARCS.AFG.asylumCountries[2].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[1].endLng,
         size:
-          (GLOBE_DATA_ARCS.AFG.asylumCountries[2].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[1]
+            .asylumSeekers /
             DATA_REFUGEES_2021_AFG) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 3
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[2].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.AFG.asylumCountries[3].endLat,
-        lng: GLOBE_DATA_ARCS.AFG.asylumCountries[3].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[2].endLng,
         size:
-          (GLOBE_DATA_ARCS.AFG.asylumCountries[3].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[2]
+            .asylumSeekers /
             DATA_REFUGEES_2021_AFG) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 4
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[3].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.AFG.asylumCountries[4].endLat,
-        lng: GLOBE_DATA_ARCS.AFG.asylumCountries[4].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[3].endLng,
         size:
-          (GLOBE_DATA_ARCS.AFG.asylumCountries[4].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[3]
+            .asylumSeekers /
             DATA_REFUGEES_2021_AFG) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 5
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[4].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
+      },
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[4].endLng,
+        size:
+          (GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].asylumCountries[4]
+            .asylumSeekers /
+            DATA_REFUGEES_2021_AFG) *
+          POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
       },
     ],
   },
-  SSD: {
+  [EWikiData.SOUTH_SUDAN]: {
     wikidataid: EWikiData.SOUTH_SUDAN,
     points: [
+      // 1
       {
-        lat: GLOBE_DATA_ARCS.SSD.asylumCountries[0].endLat,
-        lng: GLOBE_DATA_ARCS.SSD.asylumCountries[0].endLng,
-        size:
-          (GLOBE_DATA_ARCS.SSD.asylumCountries[0].asylumSeekers /
-            DATA_REFUGEES_2021_SSD) *
-          POINT_ALTITUDE,
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[0].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SSD.asylumCountries[1].endLat,
-        lng: GLOBE_DATA_ARCS.SSD.asylumCountries[1].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[0].endLng,
         size:
-          (GLOBE_DATA_ARCS.SSD.asylumCountries[1].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[0]
+            .asylumSeekers /
             DATA_REFUGEES_2021_SSD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 2
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[1].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SSD.asylumCountries[2].endLat,
-        lng: GLOBE_DATA_ARCS.SSD.asylumCountries[2].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[1].endLng,
         size:
-          (GLOBE_DATA_ARCS.SSD.asylumCountries[2].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[1]
+            .asylumSeekers /
             DATA_REFUGEES_2021_SSD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 3
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[2].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SSD.asylumCountries[3].endLat,
-        lng: GLOBE_DATA_ARCS.SSD.asylumCountries[3].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[2].endLng,
         size:
-          (GLOBE_DATA_ARCS.SSD.asylumCountries[3].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[2]
+            .asylumSeekers /
             DATA_REFUGEES_2021_SSD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 4
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[3].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.SSD.asylumCountries[4].endLat,
-        lng: GLOBE_DATA_ARCS.SSD.asylumCountries[4].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[3].endLng,
         size:
-          (GLOBE_DATA_ARCS.SSD.asylumCountries[4].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[3]
+            .asylumSeekers /
             DATA_REFUGEES_2021_SSD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 5
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[4].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
+      },
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[4].endLng,
+        size:
+          (GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].asylumCountries[4]
+            .asylumSeekers /
+            DATA_REFUGEES_2021_SSD) *
+          POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
       },
     ],
   },
-  MMR: {
+  [EWikiData.MYANMAR]: {
     wikidataid: EWikiData.MYANMAR,
     points: [
+      // 1
       {
-        lat: GLOBE_DATA_ARCS.MMR.asylumCountries[0].endLat,
-        lng: GLOBE_DATA_ARCS.MMR.asylumCountries[0].endLng,
-        size:
-          (GLOBE_DATA_ARCS.MMR.asylumCountries[0].asylumSeekers /
-            DATA_REFUGEES_2021_MMR) *
-          POINT_ALTITUDE,
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[0].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.MMR.asylumCountries[1].endLat,
-        lng: GLOBE_DATA_ARCS.MMR.asylumCountries[1].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[0].endLng,
         size:
-          (GLOBE_DATA_ARCS.MMR.asylumCountries[1].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[0].asylumSeekers /
             DATA_REFUGEES_2021_MMR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 2
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[1].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.MMR.asylumCountries[2].endLat,
-        lng: GLOBE_DATA_ARCS.MMR.asylumCountries[2].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[1].endLng,
         size:
-          (GLOBE_DATA_ARCS.MMR.asylumCountries[2].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[1].asylumSeekers /
             DATA_REFUGEES_2021_MMR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 3
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[2].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.MMR.asylumCountries[3].endLat,
-        lng: GLOBE_DATA_ARCS.MMR.asylumCountries[3].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[2].endLng,
         size:
-          (GLOBE_DATA_ARCS.MMR.asylumCountries[3].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[2].asylumSeekers /
             DATA_REFUGEES_2021_MMR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 4
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[3].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.MMR.asylumCountries[4].endLat,
-        lng: GLOBE_DATA_ARCS.MMR.asylumCountries[4].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[3].endLng,
         size:
-          (GLOBE_DATA_ARCS.MMR.asylumCountries[4].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[3].asylumSeekers /
             DATA_REFUGEES_2021_MMR) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 5
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[4].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
+      },
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[4].endLng,
+        size:
+          (GLOBE_DATA_ARCS[EWikiData.MYANMAR].asylumCountries[4].asylumSeekers /
+            DATA_REFUGEES_2021_MMR) *
+          POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
       },
     ],
   },
-  COD: {
+  [EWikiData.DR_CONGO]: {
     wikidataid: EWikiData.DR_CONGO,
     points: [
+      // 1
       {
-        lat: GLOBE_DATA_ARCS.COD.asylumCountries[0].endLat,
-        lng: GLOBE_DATA_ARCS.COD.asylumCountries[0].endLng,
-        size:
-          (GLOBE_DATA_ARCS.COD.asylumCountries[0].asylumSeekers /
-            DATA_REFUGEES_2021_COD) *
-          POINT_ALTITUDE,
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[0].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.COD.asylumCountries[1].endLat,
-        lng: GLOBE_DATA_ARCS.COD.asylumCountries[1].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[0].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[0].endLng,
         size:
-          (GLOBE_DATA_ARCS.COD.asylumCountries[1].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[0]
+            .asylumSeekers /
             DATA_REFUGEES_2021_COD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 2
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[1].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.COD.asylumCountries[2].endLat,
-        lng: GLOBE_DATA_ARCS.COD.asylumCountries[2].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[1].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[1].endLng,
         size:
-          (GLOBE_DATA_ARCS.COD.asylumCountries[2].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[1]
+            .asylumSeekers /
             DATA_REFUGEES_2021_COD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 3
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[2].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.COD.asylumCountries[3].endLat,
-        lng: GLOBE_DATA_ARCS.COD.asylumCountries[3].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[2].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[2].endLng,
         size:
-          (GLOBE_DATA_ARCS.COD.asylumCountries[3].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[2]
+            .asylumSeekers /
             DATA_REFUGEES_2021_COD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 4
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[3].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
       },
       {
-        lat: GLOBE_DATA_ARCS.COD.asylumCountries[4].endLat,
-        lng: GLOBE_DATA_ARCS.COD.asylumCountries[4].endLng,
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[3].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[3].endLng,
         size:
-          (GLOBE_DATA_ARCS.COD.asylumCountries[4].asylumSeekers /
+          (GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[3]
+            .asylumSeekers /
             DATA_REFUGEES_2021_COD) *
           POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
+      },
+      // 5
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[4].endLng,
+        size: POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA,
+        radius: 0.25,
+      },
+      {
+        lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[4].endLat,
+        lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[4].endLng,
+        size:
+          (GLOBE_DATA_ARCS[EWikiData.DR_CONGO].asylumCountries[4]
+            .asylumSeekers /
+            DATA_REFUGEES_2021_COD) *
+          POINT_ALTITUDE,
+        color: POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
+        radius: 0.275,
       },
     ],
   },
 };
 
 const GLOBE_DATA_RINGS = {
-  SYR: {
+  [EWikiData.SYRIA]: {
     wikidataid: EWikiData.SYRIA,
     rings: [...Array(RING_N_DEFAULT).keys()].map(() => ({
-      lat: GLOBE_DATA_ARCS.SYR.lat,
-      lng: GLOBE_DATA_ARCS.SYR.lng,
+      lat: GLOBE_DATA_ARCS[EWikiData.SYRIA].lat,
+      lng: GLOBE_DATA_ARCS[EWikiData.SYRIA].lng,
       maxRadius: RING_MAX_RADIUS,
       propagationSpeed: RING_PROPAGATION_SPEED,
       repeatPeriod: RING_REPEAT_PERIOD,
     })),
   },
-  AFG: {
+  [EWikiData.AFGHANISTAN]: {
     wikidataid: EWikiData.AFGHANISTAN,
     rings: [...Array(RING_N_DEFAULT).keys()].map(() => ({
-      lat: GLOBE_DATA_ARCS.AFG.lat,
-      lng: GLOBE_DATA_ARCS.AFG.lng,
+      lat: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].lat,
+      lng: GLOBE_DATA_ARCS[EWikiData.AFGHANISTAN].lng,
       maxRadius: RING_MAX_RADIUS,
       propagationSpeed: RING_PROPAGATION_SPEED,
       repeatPeriod: RING_REPEAT_PERIOD,
     })),
   },
-  SSD: {
+  [EWikiData.SOUTH_SUDAN]: {
     wikidataid: EWikiData.SOUTH_SUDAN,
     rings: [...Array(RING_N_DEFAULT).keys()].map(() => ({
-      lat: GLOBE_DATA_ARCS.SSD.lat,
-      lng: GLOBE_DATA_ARCS.SSD.lng,
+      lat: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].lat,
+      lng: GLOBE_DATA_ARCS[EWikiData.SOUTH_SUDAN].lng,
       maxRadius: RING_MAX_RADIUS,
       propagationSpeed: RING_PROPAGATION_SPEED,
       repeatPeriod: RING_REPEAT_PERIOD,
     })),
   },
-  MMR: {
+  [EWikiData.MYANMAR]: {
     wikidataid: EWikiData.MYANMAR,
     rings: [...Array(RING_N_DEFAULT).keys()].map(() => ({
-      lat: GLOBE_DATA_ARCS.MMR.lat,
-      lng: GLOBE_DATA_ARCS.MMR.lng,
+      lat: GLOBE_DATA_ARCS[EWikiData.MYANMAR].lat,
+      lng: GLOBE_DATA_ARCS[EWikiData.MYANMAR].lng,
       maxRadius: RING_MAX_RADIUS,
       propagationSpeed: RING_PROPAGATION_SPEED,
       repeatPeriod: RING_REPEAT_PERIOD,
     })),
   },
-  COD: {
+  [EWikiData.DR_CONGO]: {
     wikidataid: EWikiData.DR_CONGO,
     rings: [...Array(RING_N_DEFAULT).keys()].map(() => ({
-      lat: GLOBE_DATA_ARCS.COD.lat,
-      lng: GLOBE_DATA_ARCS.COD.lng,
+      lat: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].lat,
+      lng: GLOBE_DATA_ARCS[EWikiData.DR_CONGO].lng,
       maxRadius: RING_MAX_RADIUS,
       propagationSpeed: RING_PROPAGATION_SPEED,
       repeatPeriod: RING_REPEAT_PERIOD,

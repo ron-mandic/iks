@@ -4,54 +4,485 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  padding: 2rem;
+  padding: 1% 2.75%;
   z-index: 1;
   pointer-events: none;
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: clamp(1.5rem, 150px, 4vh);
 }
 
-.block {
-  translate: 0 0;
-  transition: translate 1.25s cubic-bezier(0.5, 0, 0.5, 1);
+.container {
+  translate: -150% 0;
+  transition: translate 1.5s cubic-bezier(0.5, 0, 0.5, 1);
   position: relative;
-  width: 400px;
-  height: 800px;
-  background-color: rgba(10, 10, 10, 0.75);
-  border-radius: 1rem;
-  backdrop-filter: blur(1rem);
-  margin-top: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: clamp(300px, 22.5vw, 2560px);
+  min-height: 600px;
+  height: 90vh;
+  background-color: rgb(10, 10, 10);
+  border-radius: 0.25vw;
+  backdrop-filter: blur(0.5vw);
+  border: 0.1vw solid rgb(61, 61, 61);
+
   pointer-events: auto;
   overflow-y: scroll;
 }
 
-.image {
-  width: 100%;
-  height: 150px;
-  background-color: rgba(245, 245, 220, 0.5);
-  border-radius: 0.5rem;
-  margin: 1.5rem 0;
+.container.on {
+  translate: 0 0;
 }
 
 .content {
-  padding: 1.25rem;
+  min-height: 100%;
 }
 
-a {
+//#c-0 {
+//  display: grid;
+//  grid-template-columns: 1fr;
+//  grid-template-rows: repeat(2, minmax(20rem, 1fr)) 2fr;
+//}
+
+// header #################################################################################
+header {
   position: sticky;
-  left: 1.25rem;
-  bottom: 1.25rem;
-  right: 1.25rem;
-  margin: 0 1.5rem;
-  display: block;
-  text-align: center;
-  background-color: #0077b6;
-  color: white;
-  padding: 1rem 0;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0 4% 2%;
+  backdrop-filter: blur(1vw);
+  background-color: rgba(10, 10, 10, 0.5);
+  border-bottom: 0.1vw solid rgba(61, 61, 61, 0.25);
+  z-index: 500;
+}
+
+.header {
+  padding-top: 5%;
+}
+p[id^="year"] {
+  font-size: 250%;
+}
+
+.sub-headline {
+  font-size: clamp(1.5rem, 150px, 1vh);
+  font-weight: normal;
+  margin: 0 0 2vh;
+}
+
+.header-total {
+  font-size: clamp(1.5rem, 150px, 6vh);
+  font-weight: bold;
+  color: #fffcc4; // #d03e3e
+}
+
+header p:not(.header-total) {
+  font-size: clamp(1.5rem, 150px, 1vh);
+  font-weight: bold;
+}
+
+// src: https://codepen.io/havardob/pen/ExVaELV
+.container-radio {
+  padding: 2rem 0 2rem;
+  position: relative;
+  width: 100%;
+}
+
+.tabs {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100px;
+  color: #fff;
+  * {
+    z-index: 2;
+  }
+  label {
+    font-size: 150%;
+  }
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 50%;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease-in;
+}
+
+input[id^="radio-1"] {
+  &:checked {
+    & ~ .glider {
+      transform: translateX(0);
+    }
+  }
+}
+
+input[id^="radio-2"] {
+  &:checked {
+    & ~ .glider {
+      transform: translateX(100%);
+    }
+  }
+}
+
+.glider {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 50%;
+  translate: 0 0;
+  background-color: #3a86ff;
+  z-index: 1;
+  border-radius: 0.5vw;
+  transition: 0.25s ease-out;
+}
+
+@media (max-width: 700px) {
+  .tabs {
+    transform: scale(0.6);
+  }
+}
+
+// .main #################################################################################
+.main,
+footer {
+  padding: 0 2.5% 2%;
+}
+
+.chart {
+  width: 100%;
+  height: clamp(300px, 15vh, 1440px);
+  padding: 1% 1.25% 5%;
+  gap: 0.25vw;
+  margin: 2vh 0 5vh;
+  background-color: rgba(10, 10, 10, 0.75);
+}
+
+.bar {
+  width: 16.6666667%;
+  height: 100%;
+  background-color: rgba(240, 248, 255, 0.1);
+  border: none;
+}
+
+.bar::before,
+.bar::after {
+  position: absolute;
+}
+
+#c-0 .bar {
+  --bar-height_1: 40%;
+  --bar-height_2: 18%;
+  --bar-height_3: 16%;
+  --bar-height_4: 14%;
+  --bar-height_5: 7%;
+  --bar-height_6: 5%;
+
+  &:nth-of-type(1)::before {
+    height: var(--bar-height_1);
+  }
+  &:nth-of-type(2)::before {
+    height: var(--bar-height_2);
+  }
+  &:nth-of-type(3)::before {
+    height: var(--bar-height_3);
+  }
+  &:nth-of-type(4)::before {
+    height: var(--bar-height_4);
+  }
+  &:nth-of-type(5)::before {
+    height: var(--bar-height_5);
+  }
+  &:nth-of-type(6)::before {
+    height: var(--bar-height_6);
+  }
+}
+
+#c-1 .bar {
+  --bar-height_1: 19%;
+  --bar-height_2: 27%;
+  --bar-height_3: 22%;
+  --bar-height_4: 20%;
+  --bar-height_5: 8%;
+  --bar-height_6: 4%;
+
+  &:nth-of-type(1)::before {
+    height: var(--bar-height_1);
+  }
+  &:nth-of-type(2)::before {
+    height: var(--bar-height_2);
+  }
+  &:nth-of-type(3)::before {
+    height: var(--bar-height_3);
+  }
+  &:nth-of-type(4)::before {
+    height: var(--bar-height_4);
+  }
+  &:nth-of-type(5)::before {
+    height: var(--bar-height_5);
+  }
+  &:nth-of-type(6)::before {
+    height: var(--bar-height_6);
+  }
+}
+
+#c-2 .bar {
+  --bar-height_1: 7%;
+  --bar-height_2: 55%;
+  --bar-height_3: 29%;
+  --bar-height_4: 6%;
+  --bar-height_5: 2%;
+  --bar-height_6: 2%;
+
+  &:nth-of-type(1)::before {
+    height: var(--bar-height_1);
+  }
+  &:nth-of-type(2)::before {
+    height: var(--bar-height_2);
+  }
+  &:nth-of-type(3)::before {
+    height: var(--bar-height_3);
+  }
+  &:nth-of-type(4)::before {
+    height: var(--bar-height_4);
+  }
+  &:nth-of-type(5)::before {
+    height: var(--bar-height_5);
+  }
+  &:nth-of-type(6)::before {
+    height: var(--bar-height_6);
+  }
+}
+
+#c-3 .bar {
+  --bar-height_1: 1%;
+  --bar-height_2: 41%;
+  --bar-height_3: 34%;
+  --bar-height_4: 16%;
+  --bar-height_5: 6%;
+  --bar-height_6: 2%;
+
+  &:nth-of-type(1)::before {
+    height: var(--bar-height_1);
+  }
+  &:nth-of-type(2)::before {
+    height: var(--bar-height_2);
+  }
+  &:nth-of-type(3)::before {
+    height: var(--bar-height_3);
+  }
+  &:nth-of-type(4)::before {
+    height: var(--bar-height_4);
+  }
+  &:nth-of-type(5)::before {
+    height: var(--bar-height_5);
+  }
+  &:nth-of-type(6)::before {
+    height: var(--bar-height_6);
+  }
+}
+
+#c-4 .bar {
+  --bar-height_1: 0%;
+  --bar-height_2: 78%;
+  --bar-height_3: 10%;
+  --bar-height_4: 8%;
+  --bar-height_5: 3%;
+  --bar-height_6: 0%;
+
+  &:nth-of-type(1)::before {
+    height: var(--bar-height_1);
+  }
+  &:nth-of-type(2)::before {
+    height: var(--bar-height_2);
+  }
+  &:nth-of-type(3)::before {
+    height: var(--bar-height_3);
+  }
+  &:nth-of-type(4)::before {
+    height: var(--bar-height_4);
+  }
+  &:nth-of-type(5)::before {
+    height: var(--bar-height_5);
+  }
+  &:nth-of-type(6)::before {
+    height: var(--bar-height_6);
+  }
+}
+
+#c-5 .bar {
+  --bar-height_1: 21%;
+  --bar-height_2: 49%;
+  --bar-height_3: 9%;
+  --bar-height_4: 8%;
+  --bar-height_5: 7%;
+  --bar-height_6: 6%;
+
+  &:nth-of-type(1)::before {
+    height: var(--bar-height_1);
+  }
+  &:nth-of-type(2)::before {
+    height: var(--bar-height_2);
+  }
+  &:nth-of-type(3)::before {
+    height: var(--bar-height_3);
+  }
+  &:nth-of-type(4)::before {
+    height: var(--bar-height_4);
+  }
+  &:nth-of-type(5)::before {
+    height: var(--bar-height_5);
+  }
+  &:nth-of-type(6)::before {
+    height: var(--bar-height_6);
+  }
+}
+
+.chart.on .bar::before {
+  content: "";
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: aliceblue;
+  transform-origin: bottom;
+  animation: scale-up 1.25s ease-out forwards;
+}
+
+.bar::after {
+  content: attr(data-label);
+  top: 110%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 100%;
+  text-align: left;
+  color: aliceblue;
+}
+
+.cards {
+  height: 100%;
+  padding: 1% 1.25%;
+  flex-direction: column;
+  gap: 0.75vh;
+}
+
+#c-0 .cards {
+  gap: 1.75vh;
+}
+
+.card {
+  flex-direction: column;
+}
+
+#c-0 .card {
+  &:nth-child(2) .thumbnail {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(19, 20, 20, 0.25),
+        rgb(19, 20, 20)
+      ),
+      url("https://foreignpolicy.com/wp-content/uploads/2016/02/syrian_small.jpg?w=800&h=514&quality=90");
+  }
+  &:nth-child(3) .thumbnail {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(19, 20, 20, 0.25),
+        rgb(19, 20, 20)
+      ),
+      url("https://cdn.cfr.org/sites/default/files/image/2021/09/afghanistanrefugees_ib.jpg");
+  }
+  &:nth-child(4) .thumbnail {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(19, 20, 20, 0.25),
+        rgb(19, 20, 20)
+      ),
+      url("https://www.unhcr.org/hk/wp-content/uploads/sites/13/2016/07/RF192374_127951.jpg");
+  }
+  &:nth-child(5) .thumbnail {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(19, 20, 20, 0.25),
+        rgb(19, 20, 20)
+      ),
+      url("https://www.care.org/wp-content/uploads/2020/05/RS30045_170915_Bangladesh_Refugees-KP-web.jpg");
+  }
+  &:nth-child(6) .thumbnail {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(19, 20, 20, 0.25),
+        rgb(19, 20, 20)
+      ),
+      url("https://www.icrc.org/sites/default/files/wysiwyg/Worldwide/Afrique/DRC/drc-kasai-tanganyika-displaced-refugees-food-malnutrition-01.jpg");
+  }
+}
+
+.card-content {
+  width: 100%;
+  height: 100%;
+  padding: 5% 5.25%;
+  background-color: rgb(19, 20, 20);
+  flex-direction: column;
+  justify-content: flex-end;
+
+  .total {
+    font-size: clamp(1.5rem, 150px, 2.5vh);
+    font-weight: bold;
+    color: #fffcc4; // #d03e3e
+  }
+}
+
+h2 {
+  font-size: 200%;
+}
+
+.thumbnail {
+  width: 100%;
+  height: clamp(300px, 15vh, 1440px);
+  background-size: cover;
+  background-position: center center;
+}
+
+// footer #################################################################################
+
+// keyframes #################################################################################
+@keyframes scale-up {
+  0% {
+    scale: 1 0;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+.mask {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 1000px;
+  height: 1000px;
+  background-color: rgba(255, 0, 0, 0.43);
+  z-index: 1001;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.col {
+  flex-grow: 1;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 255, 0.43);
 }

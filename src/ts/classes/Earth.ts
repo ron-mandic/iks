@@ -24,6 +24,8 @@ import {
   Earth_TurnOffColors,
   Earth_TurnOnColors,
 } from '../functions.ts';
+import { UI } from './UI.ts';
+import { DICT_GLOBE_ORIGINS } from '../dictionary.ts';
 
 export class Earth {
   world: GlobeInstance | null;
@@ -36,7 +38,7 @@ export class Earth {
   uiRevealed: boolean;
   zoomedOut: boolean;
 
-  ui: HTMLElement | null;
+  ui: UI;
 
   constructor(selector: string, configOptions?: ConfigOptions) {
     this.world = Globe(configOptions)(document.querySelector(selector)!)
@@ -53,7 +55,7 @@ export class Earth {
     this.uiRevealed = false;
     this.zoomedOut = false;
 
-    this.ui = $('#ui') as HTMLElement;
+    this.ui = new UI($('#ui') as HTMLElement, this);
 
     this.world!.onGlobeReady(async () => {
       fetch(GLOBE_GEO_MEDIUM_JSON_PATH)
@@ -78,6 +80,7 @@ export class Earth {
     this.onZoom();
 
     // ########################################
+    // this.world!.pauseAnimation();
     console.log(this);
   }
 
@@ -85,13 +88,22 @@ export class Earth {
     this.world?.onPolygonClick(
       // @ts-ignore
       (polygon: IGeoJSONFeature, event, coords: IGeoCoords3) => {
+        const key = polygon.properties?.wikidataid;
+
         Earth_OnClick(this, polygon as IGeoJSONFeature, event, coords);
+        if (key in DICT_GLOBE_ORIGINS) {
+          this.ui.resetInputs();
+          this.resetRoutes();
+        }
       }
     );
 
-    this.world?.onGlobeClick((coords, event) =>
-      Earth_ResetState(this, coords, event)
-    );
+    this.world?.onGlobeClick((coords, event) => {
+      Earth_ResetState(this, coords, event);
+      this.ui.resetInputs();
+      this.ui.reset();
+      this.resetRoutes();
+    });
   }
 
   // Customization #################################################################################
@@ -107,6 +119,10 @@ export class Earth {
     // Hint: Any altitude above ZOOM_POV_MAX will trigger this.world!.onZoom()
     // Hint: Only then will the colors specified for the states be activated at the following click event
     this.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 5500);
+    setTimeout(() => {
+      this.ui.ref.querySelector('.container')!.classList.add('on');
+      this.ui.currentView.querySelector('.chart')!.classList.add('on');
+    }, 4500);
   }
 
   // Setter #################################################################################
@@ -115,10 +131,33 @@ export class Earth {
   onZoom() {
     this.world!.onZoom((pov) => {
       if (pov.altitude > ZOOM_POV_MAX) {
+        if (!this.zoomedOut) this.world?.onPolygonClick(() => false);
         Earth_TurnOffColors(this);
       } else {
+        if (this.zoomedOut) {
+          this.world?.onPolygonClick(
+            // @ts-ignore
+            (polygon: IGeoJSONFeature, event, coords: IGeoCoords3) => {
+              const key = polygon.properties?.wikidataid;
+
+              Earth_OnClick(this, polygon as IGeoJSONFeature, event, coords);
+              if (key in DICT_GLOBE_ORIGINS) {
+                this.ui.resetInputs();
+                this.resetRoutes();
+              }
+            }
+          );
+        }
         Earth_TurnOnColors(this);
       }
     });
+  }
+
+  // Reset #################################################################################
+  resetRoutes() {
+    this.world!.pointsData([])
+      .pathsData([[[]]])
+      .arcsData([])
+      .ringsData([]);
   }
 }

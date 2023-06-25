@@ -12,7 +12,7 @@ const GLOBE_TEXTURE_PATH = './earth-water.low.png';
 const POLYGON_COLOR_CAP_ORIGIN_COUNTRY = '#fffcc4';
 const POLYGON_COLOR_CAP_ORIGIN_COUNTRY_ALPHA = '#fffcc444';
 const POLYGON_COLOR_CAP_ASYLUM_COUNTRY = '#FFFFFF';
-const POLYGON_ALTITUDE = 0.01;
+const POLYGON_ALTITUDE = 0.0075;
 const POLYGON_COLOR_STROKE = '#999776';
 const POLYGON_COLOR_SIDE = 'rgba(0, 100, 0, 0.15)';
 
@@ -29,7 +29,7 @@ const RING_REPEAT_PERIOD = 800;
 const RING_ALTITUDE = 0.0015;
 
 // Points #################################################################################
-const POINT_ALTITUDE = 0.3;
+const POINT_ALTITUDE = 0.25;
 
 // Zoom #################################################################################
 const ZOOM_POV_MIN = 0.1;

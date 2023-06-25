@@ -11,8 +11,40 @@
   align-items: center;
 }
 
+.sb-fe {
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.sb-s {
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.sb-c {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.c-c {
+  justify-content: center;
+  align-items: center;
+}
+
 .is-truncate {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.is-parent {
+  position: relative;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.no-select {
+  user-select: none;
 }

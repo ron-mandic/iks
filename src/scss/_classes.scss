@@ -1,0 +1,18 @@
+.debug {
+  outline: 1px solid red;
+}
+
+.flex {
+  display: flex;
+}
+
+.fs-c {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.is-truncate {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

@@ -47,10 +47,15 @@ interface IArc {
   color: string;
 }
 
-interface IGeoCoords {
+interface IGeoCoords2 {
+  lat: number;
+  lng: number;
+}
+
+interface IGeoCoords3 {
   lat: number;
   lng: number;
   altitude: number;
 }
 
-export type { IGeoJSON, IGeoJSONFeature, IArc, IGeoCoords };
+export type { IGeoJSON, IGeoJSONFeature, IArc, IGeoCoords2, IGeoCoords3 };

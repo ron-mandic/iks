@@ -6,26 +6,24 @@ import {
   GLOBE_CAP_MATERIAL_PATH,
   GLOBE_GEO_MEDIUM_JSON_PATH,
   GLOBE_IMAGE_8K_PATH,
-  POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
   ZOOM_POV_MAX,
 } from '../constants.ts';
-import { IArc, IGeoJSON } from '../interfaces.ts';
+import { IGeoCoords3, IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
 import {
+  $,
   Earth_ConfigureArcs,
   Earth_ConfigurePaths,
   Earth_ConfigurePoints,
   Earth_ConfigurePolygons,
   Earth_ConfigureRings,
   Earth_Customize,
-  Earth_FilterArcs,
+  Earth_FilterData,
+  Earth_OnClick,
   Earth_OnResize,
+  Earth_ResetState,
+  Earth_TurnOffColors,
+  Earth_TurnOnColors,
 } from '../functions.ts';
-import { EISO_A3, EWikiData } from '../enum.ts';
-import {
-  GLOBE_DATA_PATHS,
-  GLOBE_DATA_POINTS,
-  GLOBE_DATA_RINGS,
-} from '../data.ts';
 
 export class Earth {
   world: GlobeInstance | null;
@@ -35,7 +33,10 @@ export class Earth {
   selectedCountry: string | null;
 
   capTexture: THREE.Texture | null;
+  uiRevealed: boolean;
   zoomedOut: boolean;
+
+  ui: HTMLElement | null;
 
   constructor(selector: string, configOptions?: ConfigOptions) {
     this.world = Globe(configOptions)(document.querySelector(selector)!)
@@ -49,7 +50,10 @@ export class Earth {
     this.data = null;
     this.selectedCountry = null;
 
+    this.uiRevealed = false;
     this.zoomedOut = false;
+
+    this.ui = $('#ui') as HTMLElement;
 
     this.world!.onGlobeReady(async () => {
       fetch(GLOBE_GEO_MEDIUM_JSON_PATH)
@@ -64,38 +68,30 @@ export class Earth {
     this.data = data;
     this.preconfigure();
 
-    let key = EISO_A3.DR_CONGO;
-    // this.world!.polygonsData(Earth_FilterData(this.data!, key) as object[]);
-    this.world?.arcsData(
-      Earth_FilterArcs(key, (arc: IArc) => {
-        return arc.wikidataid === EWikiData.USA;
-      }) as object[]
+    this.world!.polygonsData(
+      Earth_FilterData(this.data!, 'default') as object[]
     );
 
     // ########################################
-    this.world?.pointsData(GLOBE_DATA_POINTS[key].points);
-    this.world?.pathsData(GLOBE_DATA_PATHS[key].paths);
-    this.world?.ringsData(GLOBE_DATA_RINGS[key].rings);
-
-    console.log(this);
-
-    // ########################################
     this.initEvents();
-
     window.addEventListener('resize', () => Earth_OnResize(this.world!));
     this.onZoom();
+
+    // ########################################
+    console.log(this);
   }
 
   initEvents() {
-    // this.world?.onPolygonClick();
-    // this.world?.onGlobeClick();
-    /* .polygonCapMaterial((_) => {
-      return new THREE.MeshPhongMaterial({
-        map: this.capTexture,
-        shininess: 10,
-        specular: new THREE.Color(0xffffff),
-      });
-    }); */
+    this.world?.onPolygonClick(
+      // @ts-ignore
+      (polygon: IGeoJSONFeature, event, coords: IGeoCoords3) => {
+        Earth_OnClick(this, polygon as IGeoJSONFeature, event, coords);
+      }
+    );
+
+    this.world?.onGlobeClick((coords, event) =>
+      Earth_ResetState(this, coords, event)
+    );
   }
 
   // Customization #################################################################################
@@ -108,7 +104,9 @@ export class Earth {
 
     Earth_Customize(this.world!);
 
-    this.world!.pointOfView({ altitude: 4 }, 5500);
+    // Hint: Any altitude above ZOOM_POV_MAX will trigger this.world!.onZoom()
+    // Hint: Only then will the colors specified for the states be activated at the following click event
+    this.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 5500);
   }
 
   // Setter #################################################################################
@@ -117,30 +115,9 @@ export class Earth {
   onZoom() {
     this.world!.onZoom((pov) => {
       if (pov.altitude > ZOOM_POV_MAX) {
-        this.world!.polygonCapColor((_) => 'transparent').polygonStrokeColor(
-          () => false
-        );
-        // @ts-ignore
-        if (!this.zoomedOut) this.world?.polygonCapMaterial(() => false);
-        this.zoomedOut = true;
+        Earth_TurnOffColors(this);
       } else {
-        // @ts-ignore
-        if (this.zoomedOut)
-          // @ts-ignore
-          this.world!()
-            .polygonStrokeColor(() => '#999776')
-            // @ts-ignore
-            .polygonCapColor((d: IGeoJSONFeature) => {
-              return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
-            });
-        /* .polygonCapMaterial((_) => {
-              return new THREE.MeshPhongMaterial({
-                map: this.capTexture,
-                shininess: 10,
-                specular: new THREE.Color(0xffffff),
-              });
-            }); */
-        this.zoomedOut = false;
+        Earth_TurnOnColors(this);
       }
     });
   }

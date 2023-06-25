@@ -10,17 +10,24 @@ import {
 } from './constants.ts';
 import { TextureLoader, Color } from 'three';
 import { GlobeInstance } from 'globe.gl';
-import { IArc, IGeoJSON, IGeoJSONFeature } from './interfaces.ts';
+import {
+  IArc,
+  IGeoCoords2,
+  IGeoCoords3,
+  IGeoJSON,
+  IGeoJSONFeature,
+} from './interfaces.ts';
 import { GLOBE_DATA_ARCS } from './data.ts';
 import {
-  DICT_GLOBE,
+  DICT_GLOBE_ORIGINS,
   DICT_GLOBE_AFG,
   DICT_GLOBE_COD,
   DICT_GLOBE_MMR,
   DICT_GLOBE_SSD,
   DICT_GLOBE_SYR,
 } from './dictionary.ts';
-import { EISO_A3, EWikiData } from './enum.ts';
+import { EWikiData } from './enum.ts';
+import { Earth } from './classes/Earth.ts';
 
 // General #################################################################################
 
@@ -118,70 +125,70 @@ function Earth_Customize(world: GlobeInstance) {
   Earth_SetLight(world);
 }
 
-function Earth_FilterData(data: IGeoJSON, key: string, includeOrigin = true) {
+function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
   switch (key) {
     case 'default': {
       return data.features.filter(
-        (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE
+        (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_ORIGINS
       );
     }
-    case EISO_A3.SYRIA: {
-      return !includeOrigin
+    case EWikiData.SYRIA: {
+      return !includeOrigins
         ? data.features.filter(
             (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_SYR
           )
         : data.features.filter(
             (d: IGeoJSONFeature) =>
               d.properties?.wikidataid in DICT_GLOBE_SYR ||
-              d.properties?.wikidataid === EWikiData.SYRIA
+              d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
-    case EISO_A3.AFGHANISTAN: {
-      return !includeOrigin
+    case EWikiData.AFGHANISTAN: {
+      return !includeOrigins
         ? data.features.filter(
             (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_AFG
           )
         : data.features.filter(
             (d: IGeoJSONFeature) =>
               d.properties?.wikidataid in DICT_GLOBE_AFG ||
-              d.properties?.wikidataid === EWikiData.AFGHANISTAN
+              d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
-    case EISO_A3.SOUTH_SUDAN: {
-      return !includeOrigin
+    case EWikiData.SOUTH_SUDAN: {
+      return !includeOrigins
         ? data.features.filter(
             (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_SSD
           )
         : data.features.filter(
             (d: IGeoJSONFeature) =>
               d.properties?.wikidataid in DICT_GLOBE_SSD ||
-              d.properties?.wikidataid === EWikiData.SOUTH_SUDAN
+              d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
-    case EISO_A3.MYANMAR: {
-      return !includeOrigin
+    case EWikiData.MYANMAR: {
+      return !includeOrigins
         ? data.features.filter(
             (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_MMR
           )
         : data.features.filter(
             (d: IGeoJSONFeature) =>
               d.properties?.wikidataid in DICT_GLOBE_MMR ||
-              d.properties?.wikidataid === EWikiData.MYANMAR
+              d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
-    case EISO_A3.DR_CONGO: {
-      return !includeOrigin
+    case EWikiData.DR_CONGO: {
+      return !includeOrigins
         ? data.features.filter(
             (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_COD
           )
         : data.features.filter(
             (d: IGeoJSONFeature) =>
               d.properties?.wikidataid in DICT_GLOBE_COD ||
-              d.properties?.wikidataid === EWikiData.DR_CONGO
+              d.properties?.wikidataid in DICT_GLOBE_ORIGINS
           );
     }
     default: {
-      return data.features;
+      return [];
     }
   }
 }
@@ -194,6 +201,114 @@ function Earth_FilterArcs(key: string, callback?: (arc: IArc) => boolean) {
     : GLOBE_DATA_ARCS[
         key as keyof typeof GLOBE_DATA_ARCS
       ].asylumCountries.filter(callback);
+}
+
+// Events #################################################################################
+function Earth_OnClick(
+  earth: Earth,
+  polygon: IGeoJSONFeature,
+  event: MouseEvent,
+  coords: IGeoCoords3
+) {
+  if (earth.selectedCountry !== polygon.properties.wikidataid) {
+    earth.selectedCountry = polygon.properties.wikidataid;
+  }
+
+  Earth_OnSelect(earth, polygon /* event, coords */);
+
+  const { lat, lng } = coords;
+  if (earth.selectedCountry in DICT_GLOBE_ORIGINS)
+    earth.world!.pointOfView({ lat, lng, altitude: 0.75 }, 1750);
+
+  // console.log(
+  //   DICT_COUNTRIES[earth.selectedCountry! as keyof typeof DICT_COUNTRIES]
+  // );
+}
+
+function Earth_OnSelect(
+  earth: Earth,
+  polygon: IGeoJSONFeature
+  // event: MouseEvent,
+  // coords: IGeoCoords3
+) {
+  const key = earth.selectedCountry ?? polygon.properties.wikidataid;
+
+  // Polygons
+  if (key in DICT_GLOBE_ORIGINS) {
+    earth
+      .world!.polygonsData(Earth_FilterData(earth.data!, key) as object[])
+      .polygonCapColor(
+        // @ts-ignore
+        (polygon: IGeoJSONFeature) =>
+          Earth_GetCapColor(earth, polygon) || POLYGON_COLOR_CAP_ORIGIN_COUNTRY
+      )
+      .polygonStrokeColor(() => '#999776');
+  }
+}
+
+function Earth_GetCapColor(
+  earth: Earth,
+  polygon: IGeoJSONFeature
+): string | undefined {
+  const key = earth.selectedCountry;
+
+  if (!key) return;
+
+  if (key === polygon.properties.wikidataid) {
+    return '#3a86ff';
+  }
+
+  const dictKey =
+    DICT_GLOBE_ORIGINS[key as keyof typeof DICT_GLOBE_ORIGINS]?.dict;
+  if (dictKey && polygon.properties.wikidataid in dictKey) {
+    return 'white';
+  }
+
+  if (key !== polygon.properties.wikidataid && key in DICT_GLOBE_ORIGINS) {
+    return '3a86ff44';
+  }
+}
+
+function Earth_TurnOnColors(earth: Earth) {
+  if (earth.zoomedOut) {
+    earth.world!.polygonStrokeColor(() => '#999776');
+    earth.world!.polygonCapColor(
+      // @ts-ignore
+      (polygon: IGeoJSONFeature) =>
+        Earth_GetCapColor(earth, polygon) || POLYGON_COLOR_CAP_ORIGIN_COUNTRY
+    );
+
+    earth.zoomedOut = false;
+  }
+}
+
+function Earth_TurnOffColors(earth: Earth) {
+  if (!earth.zoomedOut) {
+    earth
+      .world!.polygonCapColor((_) => 'transparent')
+      .polygonStrokeColor(() => false);
+    // @ts-ignore
+    earth.world?.polygonCapMaterial(() => false);
+    earth.zoomedOut = true;
+  }
+}
+
+function Earth_ResetState(
+  earth: Earth,
+  coords?: IGeoCoords2,
+  event?: MouseEvent
+) {
+  console.log(coords, event);
+
+  earth.selectedCountry = null;
+
+  earth.world!.polygonsData(
+    Earth_FilterData(earth.data!, 'default') as object[]
+  );
+
+  if (!earth.zoomedOut) {
+    earth.world!.polygonCapColor(() => POLYGON_COLOR_CAP_ORIGIN_COUNTRY);
+  }
 }
 
 export {
@@ -210,4 +325,10 @@ export {
   Earth_Customize,
   Earth_FilterData,
   Earth_FilterArcs,
+  Earth_OnClick,
+  Earth_OnSelect,
+  Earth_GetCapColor,
+  Earth_TurnOnColors,
+  Earth_TurnOffColors,
+  Earth_ResetState,
 };

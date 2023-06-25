@@ -37,6 +37,7 @@ interface IGeoJSONFeature {
 }
 
 interface IArc {
+  wikidataid: string;
   name: string;
   asylumSeekers: number;
   startLat: number;

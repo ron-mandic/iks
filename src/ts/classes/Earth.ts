@@ -1,22 +1,15 @@
 import Globe, { ConfigOptions, GlobeInstance } from 'globe.gl';
 import * as THREE from 'three';
 import {
-  d0,
-  d1,
-  d2,
-  d3,
-  d4,
   GLOBE_BACKGROUND_IMAGE_PATH,
   GLOBE_BUMP_IMAGE_PATH,
   GLOBE_CAP_MATERIAL_PATH,
-  GLOBE_GEO_LOW_JSON_PATH,
+  GLOBE_GEO_MEDIUM_JSON_PATH,
   GLOBE_IMAGE_8K_PATH,
-  objOriginCountries,
   POLYGON_COLOR_CAP_ORIGIN_COUNTRY,
-  RING_ALTITUDE,
   ZOOM_POV_MAX,
 } from '../constants.ts';
-import { IGeoCoords, IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
+import { IArc, IGeoJSON } from '../interfaces.ts';
 import {
   Earth_ConfigureArcs,
   Earth_ConfigurePaths,
@@ -24,9 +17,15 @@ import {
   Earth_ConfigurePolygons,
   Earth_ConfigureRings,
   Earth_Customize,
-  Earth_FilterData,
+  Earth_FilterArcs,
   Earth_OnResize,
 } from '../functions.ts';
+import { EISO_A3, EWikiData } from '../enum.ts';
+import {
+  GLOBE_DATA_PATHS,
+  GLOBE_DATA_POINTS,
+  GLOBE_DATA_RINGS,
+} from '../data.ts';
 
 export class Earth {
   world: GlobeInstance | null;
@@ -38,13 +37,12 @@ export class Earth {
   capTexture: THREE.Texture | null;
   zoomedOut: boolean;
 
-  arr;
-
   constructor(selector: string, configOptions?: ConfigOptions) {
     this.world = Globe(configOptions)(document.querySelector(selector)!)
       .globeImageUrl(GLOBE_IMAGE_8K_PATH)
       .bumpImageUrl(GLOBE_BUMP_IMAGE_PATH)
       .backgroundImageUrl(GLOBE_BACKGROUND_IMAGE_PATH);
+
     this.THREE = this.world!.renderer();
     this.capTexture = new THREE.TextureLoader().load(GLOBE_CAP_MATERIAL_PATH);
 
@@ -53,10 +51,8 @@ export class Earth {
 
     this.zoomedOut = false;
 
-    this.arr = [];
-
     this.world!.onGlobeReady(async () => {
-      fetch(GLOBE_GEO_LOW_JSON_PATH)
+      fetch(GLOBE_GEO_MEDIUM_JSON_PATH)
         .then((response) => response.json())
         .then((data: IGeoJSON) => this.render(data))
         .catch((error) => console.error('onGlobeReady: ', error));
@@ -67,82 +63,32 @@ export class Earth {
   render(data: IGeoJSON) {
     this.data = data;
     this.preconfigure();
-    this.setPolygons();
 
-    this.onResize();
-    this.onZoom();
+    let key = EISO_A3.DR_CONGO;
+    // this.world!.polygonsData(Earth_FilterData(this.data!, key) as object[]);
+    this.world?.arcsData(
+      Earth_FilterArcs(key, (arc: IArc) => {
+        return arc.wikidataid === EWikiData.USA;
+      }) as object[]
+    );
 
-    this.initEvents();
-
-    this.world?.pointsData([
-      {
-        lat: objOriginCountries.COD.asylumCountries[0].endLat,
-        lng: objOriginCountries.COD.asylumCountries[0].endLng,
-        color: 'red',
-        size:
-          (objOriginCountries.COD.asylumCountries[0].asylumSeekers /
-            objOriginCountries.COD.refugees) *
-          0.375,
-      },
-      {
-        lat: objOriginCountries.COD.asylumCountries[1].endLat,
-        lng: objOriginCountries.COD.asylumCountries[1].endLng,
-        color: 'red',
-        size:
-          (objOriginCountries.COD.asylumCountries[1].asylumSeekers /
-            objOriginCountries.COD.refugees) *
-          0.375,
-      },
-      {
-        lat: objOriginCountries.COD.asylumCountries[2].endLat,
-        lng: objOriginCountries.COD.asylumCountries[2].endLng,
-        color: 'red',
-        size:
-          (objOriginCountries.COD.asylumCountries[2].asylumSeekers /
-            objOriginCountries.COD.refugees) *
-          0.375,
-      },
-      {
-        lat: objOriginCountries.COD.asylumCountries[3].endLat,
-        lng: objOriginCountries.COD.asylumCountries[3].endLng,
-        color: 'red',
-        size:
-          (objOriginCountries.COD.asylumCountries[3].asylumSeekers /
-            objOriginCountries.COD.refugees) *
-          0.375,
-      },
-      {
-        lat: objOriginCountries.COD.asylumCountries[4].endLat,
-        lng: objOriginCountries.COD.asylumCountries[4].endLng,
-        color: 'red',
-        size:
-          (objOriginCountries.COD.asylumCountries[4].asylumSeekers /
-            objOriginCountries.COD.refugees) *
-          0.375,
-      },
-    ]);
-
-    this.world?.pathsData(d4);
-
-    const N = 8;
-    const gData = [...Array(N).keys()].map(() => ({
-      lat: objOriginCountries.COD.lat,
-      lng: objOriginCountries.COD.lng,
-      maxRadius: 4,
-      propagationSpeed: 1.25,
-      repeatPeriod: 800,
-    }));
-
-    this.world!.ringsData(gData);
+    // ########################################
+    this.world?.pointsData(GLOBE_DATA_POINTS[key].points);
+    this.world?.pathsData(GLOBE_DATA_PATHS[key].paths);
+    this.world?.ringsData(GLOBE_DATA_RINGS[key].rings);
 
     console.log(this);
+
+    // ########################################
+    this.initEvents();
+
+    window.addEventListener('resize', () => Earth_OnResize(this.world!));
+    this.onZoom();
   }
 
   initEvents() {
     // this.world?.onPolygonClick();
     // this.world?.onGlobeClick();
-
-    this.world!.polygonCapColor(() => POLYGON_COLOR_CAP_ORIGIN_COUNTRY);
     /* .polygonCapMaterial((_) => {
       return new THREE.MeshPhongMaterial({
         map: this.capTexture,
@@ -166,17 +112,8 @@ export class Earth {
   }
 
   // Setter #################################################################################
-  setPolygons() {
-    /* this.world!.polygonsData(
-      Earth_FilterData(this.data!, 'default') as object[]
-    ); */
-  }
 
   // Events #################################################################################
-  onResize() {
-    window.addEventListener('resize', () => Earth_OnResize(this.world!));
-  }
-
   onZoom() {
     this.world!.onZoom((pov) => {
       if (pov.altitude > ZOOM_POV_MAX) {
@@ -190,10 +127,12 @@ export class Earth {
         // @ts-ignore
         if (this.zoomedOut)
           // @ts-ignore
-          this.world!().polygonStrokeColor(() => '#999776');
-        /* .polygonCapColor((d: IGeoJSONFeature) => {
-            return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
-          }) */
+          this.world!()
+            .polygonStrokeColor(() => '#999776')
+            // @ts-ignore
+            .polygonCapColor((d: IGeoJSONFeature) => {
+              return POLYGON_COLOR_CAP_ORIGIN_COUNTRY;
+            });
         /* .polygonCapMaterial((_) => {
               return new THREE.MeshPhongMaterial({
                 map: this.capTexture,

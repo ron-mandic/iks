@@ -1,7 +1,7 @@
 import { Earth } from './Earth.ts';
 import { EWikiData } from '../enum.ts';
 import { DICT_GLOBE_ORIGINS } from '../dictionary.ts';
-import { UI_TriggerCanvas } from '../functions.ts';
+import { UI_TriggerCanvas, UI_TriggerPointOfView } from '../functions.ts';
 
 export class UI {
   ref: HTMLElement;
@@ -11,6 +11,8 @@ export class UI {
   dictTabs: { [key: string]: HTMLElement };
   dictCharts: { [key: string]: HTMLElement };
 
+  motherView: HTMLElement;
+
   arrTabs;
   currentKey: string;
   currentView: HTMLElement;
@@ -19,6 +21,8 @@ export class UI {
     this.ref = ref;
     this.parent = earth;
     this.arrTabs = Array.from(this.ref.querySelectorAll('.tabs'));
+
+    this.motherView = this.ref.querySelector('#c-0')!;
 
     this.dictKeys = {
       [EWikiData.SYRIA]: 'c-1',
@@ -85,6 +89,12 @@ export class UI {
   }
 
   initClickEvents() {
+    this.ref.querySelectorAll('.card').forEach((el) => {
+      el.addEventListener('click', (e: Event) =>
+        UI_TriggerPointOfView(e, this.parent.world!)
+      );
+    });
+
     this.ref.querySelectorAll("input[type='radio']").forEach((el) => {
       el.addEventListener('click', (e) => {
         UI_TriggerCanvas(e.target as HTMLInputElement, this);

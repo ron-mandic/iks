@@ -1880,6 +1880,149 @@ const GLOBE_DATA_RINGS = {
   },
 };
 
+const GLOBE_DATA_GEO = {
+  [EWikiData.SYRIA]: {
+    lat: 35.2721,
+    lng: 38.648549,
+    altitude: 3,
+  },
+  [EWikiData.AFGHANISTAN]: {
+    lat: 34.003034,
+    lng: 66.221166,
+    altitude: 3,
+  },
+  [EWikiData.SOUTH_SUDAN]: {
+    lat: 7.074598,
+    lng: 30.400969,
+    altitude: 3,
+  },
+  [EWikiData.MYANMAR]: {
+    lat: 21.968437,
+    lng: 96.552188,
+    altitude: 3,
+  },
+  [EWikiData.DR_CONGO]: {
+    lat: -3.161418,
+    lng: 23.498711,
+    altitude: 3,
+  },
+  // Syria
+  [EWikiData.LEBANON]: {
+    lat: 33.940181,
+    lng: 35.932404,
+    altitude: 0.175,
+  },
+  [EWikiData.JORDAN]: {
+    lat: 31.665143,
+    lng: 36.537722,
+    altitude: 0.375,
+  },
+  [EWikiData.GERMANY]: {
+    lat: 50.890472,
+    lng: 10.320835,
+    altitude: 0.375,
+  },
+  [EWikiData.IRAQ]: {
+    lat: 33.085227,
+    lng: 43.88501,
+    altitude: 0.375,
+  },
+  [EWikiData.EGYPT]: {
+    lat: 26.836687,
+    lng: 29.226787,
+    altitude: 0.375,
+  },
+  // Afghanistan
+  [EWikiData.PAKISTAN]: {
+    lat: 29.630207,
+    lng: 69.219838,
+    altitude: 0.375,
+  },
+  [EWikiData.IRAN]: {
+    lat: 32.50021,
+    lng: 54.471369,
+    altitude: 0.375,
+  },
+  [EWikiData.FRANCE]: {
+    lat: 46.8631,
+    lng: 2.452007,
+    altitude: 0.375,
+  },
+  [EWikiData.AUSTRIA]: {
+    lat: 47.506048,
+    lng: 14.593212,
+    altitude: 0.275,
+  },
+  // South Sudan
+  [EWikiData.UGANDA]: {
+    lat: 1.225802,
+    lng: 32.445071,
+    altitude: 0.375,
+  },
+  [EWikiData.SUDAN]: {
+    lat: 16.136582,
+    lng: 29.911939,
+    altitude: 0.375,
+  },
+  [EWikiData.ETHIOPIA]: {
+    lat: 8.420387,
+    lng: 40.178573,
+    altitude: 0.375,
+  },
+  [EWikiData.KENYA]: {
+    lat: 0.666511,
+    lLng: 38.006983,
+    altitude: 0.375,
+  },
+  // Myanmar
+  [EWikiData.BANGLADESH]: {
+    lat: 24.358492,
+    lng: 90.08321,
+    altitude: 0.375,
+  },
+  [EWikiData.MALAYSIA]: {
+    lat: 4.146678,
+    lng: 102.073272,
+    altitude: 0.375,
+  },
+  [EWikiData.THAILAND]: {
+    lat: 15.758767,
+    lng: 101.615135,
+    altitude: 0.375,
+  },
+  [EWikiData.INDIA]: {
+    lat: 23.423494,
+    lng: 78.597495,
+    altitude: 0.575,
+  },
+  [EWikiData.USA]: {
+    lat: 39.703568,
+    lng: -99.370162,
+    altitude: 0.775,
+  },
+  // DR Congo
+  [EWikiData.BURUNDI]: {
+    lat: -3.366694,
+    lng: 29.916226,
+    altitude: 0.175,
+  },
+  [EWikiData.RWANDA]: {
+    lat: -1.946994,
+    lng: 29.972574,
+    altitude: 0.175,
+  },
+  [EWikiData.ZAMBIA]: {
+    lat: -14.040237,
+    lng: 28.525552,
+    altitude: 0.375,
+  },
+  [EWikiData.TANZANIA]: {
+    lat: -6.22622,
+    lng: 35.065655,
+    altitude: 0.375,
+  },
+};
+
 export {
   DATA_REFUGEES_2021_WORLD,
   DATA_REFUGEES_2021_SYR,
@@ -1892,4 +2035,5 @@ export {
   GLOBE_DATA_ARCS,
   GLOBE_DATA_POINTS,
   GLOBE_DATA_RINGS,
+  GLOBE_DATA_GEO,
 };

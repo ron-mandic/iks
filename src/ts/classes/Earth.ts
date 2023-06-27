@@ -1,5 +1,7 @@
 import Globe, { ConfigOptions, GlobeInstance } from 'globe.gl';
 import * as THREE from 'three';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import {
   GLOBE_BACKGROUND_IMAGE_PATH,
   GLOBE_BUMP_IMAGE_PATH,
@@ -27,6 +29,8 @@ import {
 import { UI } from './UI.ts';
 import { DICT_GLOBE_ORIGINS } from '../dictionary.ts';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export class Earth {
   world: GlobeInstance | null;
   THREE: THREE.WebGLRenderer | null;
@@ -39,6 +43,7 @@ export class Earth {
   zoomedOut: boolean;
 
   ui: UI;
+  timeline: gsap.core.Timeline;
 
   constructor(selector: string, configOptions?: ConfigOptions) {
     this.world = Globe(configOptions)(document.querySelector(selector)!)
@@ -57,11 +62,26 @@ export class Earth {
 
     this.ui = new UI($('#ui') as HTMLElement, this);
 
+    this.timeline = gsap.timeline();
+
     this.world!.onGlobeReady(async () => {
       fetch(GLOBE_GEO_MEDIUM_JSON_PATH)
         .then((response) => response.json())
         .then((data: IGeoJSON) => this.render(data))
         .catch((error) => console.error('onGlobeReady: ', error));
+
+      this.timeline.fromTo(
+        '.container',
+        { translateX: '-150%' },
+        { translateX: '0%', duration: 1.5, delay: 4.5, ease: 'power2.inOut' }
+      );
+
+      // Hint: Any altitude above ZOOM_POV_MAX will trigger this.world!.onZoom()
+      // Hint: Only then will the colors specified for the states be activated at the following click event
+      this.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 5500);
+      setTimeout(() => {
+        this.ui.currentView.querySelector('.chart')!.classList.add('on');
+      }, 6000);
     });
   }
 
@@ -103,6 +123,8 @@ export class Earth {
       this.ui.resetInputs();
       this.ui.reset();
       this.resetRoutes();
+
+      // this.world!.pointOfView({ lat: 0, lng: 20, altitude: 4 }, 5500);
     });
   }
 
@@ -115,14 +137,6 @@ export class Earth {
     Earth_ConfigurePoints(this.world!);
 
     Earth_Customize(this.world!);
-
-    // Hint: Any altitude above ZOOM_POV_MAX will trigger this.world!.onZoom()
-    // Hint: Only then will the colors specified for the states be activated at the following click event
-    this.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 5500);
-    setTimeout(() => {
-      this.ui.ref.querySelector('.container')!.classList.add('on');
-      this.ui.currentView.querySelector('.chart')!.classList.add('on');
-    }, 4500);
   }
 
   // Setter #################################################################################
@@ -133,6 +147,13 @@ export class Earth {
       if (pov.altitude > ZOOM_POV_MAX) {
         if (!this.zoomedOut) this.world?.onPolygonClick(() => false);
         Earth_TurnOffColors(this);
+
+        this.world!.polygonsData(
+          Earth_FilterData(this.data!, 'default') as object[]
+        );
+        this.ui.resetInputs();
+        this.ui.reset();
+        this.resetRoutes();
       } else {
         if (this.zoomedOut) {
           this.world?.onPolygonClick(

@@ -14,8 +14,6 @@ h1 {
 }
 
 .container {
-  translate: -150% 0;
-  transition: translate 1.5s cubic-bezier(0.5, 0, 0.5, 1);
   position: relative;
   width: clamp(300px, 22.5vw, 2560px);
   min-height: 600px;
@@ -42,6 +40,24 @@ h1 {
 //  grid-template-columns: 1fr;
 //  grid-template-rows: repeat(2, minmax(20rem, 1fr)) 2fr;
 //}
+
+#c-0 .card[data-id]:hover {
+  cursor: pointer;
+}
+.card[data-id] .card-content {
+  &:hover {
+    cursor: pointer;
+  }
+}
+.card[data-id] {
+  scale: 1;
+  transition: 0.5s ease-out;
+}
+.card[data-id]:active {
+  background-color: #282727;
+  scale: 0.95;
+  transition: 0.25s ease-in-out;
+}
 
 // header #################################################################################
 header {
@@ -421,7 +437,7 @@ footer {
         rgba(19, 20, 20, 0.25),
         rgb(19, 20, 20)
       ),
-      url("https://www.icrc.org/sites/default/files/wysiwyg/Worldwide/Afrique/DRC/drc-kasai-tanganyika-displaced-refugees-food-malnutrition-01.jpg");
+      url("https://idsb.tmgrup.com.tr/ly/uploads/images/2022/02/04/180092.jpg");
   }
 }
 

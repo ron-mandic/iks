@@ -19,6 +19,7 @@ import {
 } from './interfaces.ts';
 import {
   GLOBE_DATA_ARCS,
+  GLOBE_DATA_GEO,
   GLOBE_DATA_PATHS,
   GLOBE_DATA_POINTS,
   GLOBE_DATA_RINGS,
@@ -105,7 +106,7 @@ function Earth_ConfigureArcs(world: GlobeInstance) {
 
 function Earth_ConfigurePaths(world: GlobeInstance) {
   world
-    .pathStroke(8.5)
+    .pathStroke(6.5)
     .pathPointAlt(0)
     .pathColor(() => ['#a4161a', '#bf0603'])
     .pathTransitionDuration(1500);
@@ -442,6 +443,103 @@ function UI_TriggerCanvas(target: HTMLInputElement, ui: UI) {
   }
 }
 
+function UI_TriggerPointOfView(e: Event, world: GlobeInstance) {
+  const key = (e.currentTarget as HTMLInputElement).getAttribute('data-id')!;
+  if (!key) return;
+
+  switch (key) {
+    case EWikiData.SYRIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.SYRIA], 1000);
+      break;
+    case EWikiData.AFGHANISTAN:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.AFGHANISTAN], 1000);
+      break;
+    case EWikiData.SOUTH_SUDAN:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.SOUTH_SUDAN], 1000);
+      break;
+    case EWikiData.MYANMAR:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.MYANMAR], 1000);
+      break;
+    case EWikiData.DR_CONGO:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.DR_CONGO], 1000);
+      break;
+    // Syria
+    // cases for lebanon, Jordan, Germany, Iraq and Egypt
+    case EWikiData.LEBANON:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.LEBANON], 1000);
+      break;
+    case EWikiData.JORDAN:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.JORDAN], 1000);
+      break;
+    case EWikiData.GERMANY:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.GERMANY], 1000);
+      break;
+    case EWikiData.IRAQ:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.IRAQ], 1000);
+      break;
+    case EWikiData.EGYPT:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.EGYPT], 1000);
+      break;
+    // Afghanistan
+    case EWikiData.PAKISTAN:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.PAKISTAN], 1000);
+      break;
+    case EWikiData.IRAN:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.IRAN], 1000);
+      break;
+    case EWikiData.FRANCE:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.FRANCE], 1000);
+      break;
+    case EWikiData.AUSTRIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.AUSTRIA], 1000);
+      break;
+    // South Sudan
+    case EWikiData.UGANDA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.UGANDA], 1000);
+      break;
+    case EWikiData.SUDAN:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.SUDAN], 1000);
+      break;
+    case EWikiData.ETHIOPIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.ETHIOPIA], 1000);
+      break;
+    case EWikiData.KENYA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.KENYA], 1000);
+      break;
+    // Myanmar
+    case EWikiData.BANGLADESH:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.BANGLADESH], 1000);
+      break;
+    case EWikiData.MALAYSIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.MALAYSIA], 1000);
+      break;
+    case EWikiData.THAILAND:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.THAILAND], 1000);
+      break;
+    case EWikiData.INDIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.INDIA], 1000);
+      break;
+    case EWikiData.USA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.USA], 1000);
+      break;
+    // DR Congo
+    case EWikiData.BURUNDI:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.BURUNDI], 1000);
+      break;
+    case EWikiData.RWANDA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.RWANDA], 1000);
+      break;
+    case EWikiData.ZAMBIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.ZAMBIA], 1000);
+      break;
+    case EWikiData.TANZANIA:
+      world.pointOfView(GLOBE_DATA_GEO[EWikiData.TANZANIA], 1000);
+      break;
+    default:
+      return;
+  }
+}
+
 export {
   $,
   $$,
@@ -463,4 +561,5 @@ export {
   Earth_TurnOffColors,
   Earth_ResetState,
   UI_TriggerCanvas,
+  UI_TriggerPointOfView,
 };

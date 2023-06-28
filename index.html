@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="stylesheet" href="src/index.scss" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="./src/index.scss" />
     <title>Internationale Fl&uuml;chtlingsbewegungen - IKS</title>
   </head>
-  <body>
+  <body class="no-scroll-x">
     <div id="app">
       <div id="ui" class="flex fs-c">
-        <div class="container no-select">
+        <div class="container no-select no-scroll-x">
           <div id="c-0" class="content">
             <header>
               <div class="header flex sb-c">
                 <h1 class="is-truncate">World</h1>
                 <p id="year-0">2021</p>
               </div>
-              <p class="sub-headline">Refugee population</p>
               <p class="header-total">17,199,419</p>
+              <p class="sub-headline">Refugee population</p>
             </header>
             <div class="main">
               <div class="chart is-parent flex sb-fe">
@@ -489,6 +489,6 @@
       <div id="globe"></div>
     </div>
 
-    <script type="module" src="src/index.ts"></script>
+    <script type="module" src="./src/index.ts"></script>
   </body>
 </html>

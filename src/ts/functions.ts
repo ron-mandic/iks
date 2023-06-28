@@ -109,7 +109,7 @@ function Earth_ConfigurePaths(world: GlobeInstance) {
     .pathStroke(6.5)
     .pathPointAlt(0)
     .pathColor(() => ['#a4161a', '#bf0603'])
-    .pathTransitionDuration(1500);
+    .pathTransitionDuration(Math.random() * 2000 + 1000);
 }
 
 function Earth_ConfigureRings(world: GlobeInstance) {
@@ -132,6 +132,9 @@ function Earth_ConfigurePoints(world: GlobeInstance) {
 function Earth_Customize(world: GlobeInstance) {
   world.controls().autoRotate = true;
   world.controls().autoRotateSpeed = 0.035;
+  world.controls().maxDistance = 1500;
+  world.controls().zoomSpeed = 15;
+
   Earth_SetMaterial(world);
   Earth_SetLight(world);
 }
@@ -283,6 +286,23 @@ function Earth_OnClick(
   // console.log(
   //   DICT_COUNTRIES[earth.selectedCountry! as keyof typeof DICT_COUNTRIES]
   // );
+}
+
+function Earth_OnPolygonClick(
+  earth: Earth,
+  polygon: IGeoJSONFeature,
+  event: MouseEvent,
+  coords: IGeoCoords3
+) {
+  const key = polygon.properties?.wikidataid;
+
+  Earth_OnClick(earth, polygon as IGeoJSONFeature, event, coords);
+  if (key in DICT_GLOBE_ORIGINS) {
+    earth.ui.resetInputs();
+    earth.resetRoutes();
+  }
+
+  earth.ui.resetScrollState();
 }
 
 function Earth_OnSelect(
@@ -554,6 +574,7 @@ export {
   Earth_Customize,
   Earth_FilterData,
   Earth_FilterArcs,
+  Earth_OnPolygonClick,
   Earth_OnClick,
   Earth_OnSelect,
   Earth_GetCapColor,

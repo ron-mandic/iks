@@ -115,4 +115,13 @@ export class UI {
       input.checked = false;
     });
   }
+
+  resetScrollState(animated = false) {
+    animated
+      ? this.ref.querySelector('.container')!.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+      : (this.ref.querySelector('.container')!.scrollTop = 0);
+  }
 }

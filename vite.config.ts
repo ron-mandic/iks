@@ -7,7 +7,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        nested: resolve(__dirname, 'nested/index.html'),
+        doaa: resolve(__dirname, 'doaa/index.html'),
+        playground: resolve(__dirname, 'playground/index.html'),
       },
     },
   },

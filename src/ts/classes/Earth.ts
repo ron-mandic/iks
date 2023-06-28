@@ -10,7 +10,7 @@ import {
   GLOBE_IMAGE_8K_PATH,
   ZOOM_POV_MAX,
 } from '../constants.ts';
-import { IGeoCoords3, IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
+import { IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
 import {
   $,
   Earth_ConfigureArcs,
@@ -20,20 +20,21 @@ import {
   Earth_ConfigureRings,
   Earth_Customize,
   Earth_FilterData,
-  Earth_OnClick,
+  Earth_OnPolygonClick,
   Earth_OnResize,
   Earth_ResetState,
   Earth_TurnOffColors,
   Earth_TurnOnColors,
 } from '../functions.ts';
 import { UI } from './UI.ts';
-import { DICT_GLOBE_ORIGINS } from '../dictionary.ts';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export class Earth {
   world: GlobeInstance | null;
-  THREE: THREE.WebGLRenderer | null;
+  WebGLRenderer: THREE.WebGLRenderer | null;
+  Scene: THREE.Scene | null;
+  Camera: THREE.Camera | null;
 
   data: IGeoJSON | null;
   selectedCountry: string | null;
@@ -51,7 +52,10 @@ export class Earth {
       .bumpImageUrl(GLOBE_BUMP_IMAGE_PATH)
       .backgroundImageUrl(GLOBE_BACKGROUND_IMAGE_PATH);
 
-    this.THREE = this.world!.renderer();
+    this.WebGLRenderer = this.world!.renderer();
+    this.Scene = this.world!.scene();
+    this.Camera = this.world!.camera();
+
     this.capTexture = new THREE.TextureLoader().load(GLOBE_CAP_MATERIAL_PATH);
 
     this.data = null;
@@ -105,25 +109,16 @@ export class Earth {
   }
 
   initEvents() {
-    this.world?.onPolygonClick(
-      // @ts-ignore
-      (polygon: IGeoJSONFeature, event, coords: IGeoCoords3) => {
-        const key = polygon.properties?.wikidataid;
-
-        Earth_OnClick(this, polygon as IGeoJSONFeature, event, coords);
-        if (key in DICT_GLOBE_ORIGINS) {
-          this.ui.resetInputs();
-          this.resetRoutes();
-        }
-      }
+    this.world?.onPolygonClick((polygon, event, coords) =>
+      Earth_OnPolygonClick(this, polygon as IGeoJSONFeature, event, coords)
     );
 
     this.world?.onGlobeClick((coords, event) => {
       Earth_ResetState(this, coords, event);
       this.ui.resetInputs();
       this.ui.reset();
+      this.ui.resetScrollState();
       this.resetRoutes();
-
       // this.world!.pointOfView({ lat: 0, lng: 20, altitude: 4 }, 5500);
     });
   }
@@ -156,17 +151,13 @@ export class Earth {
         this.resetRoutes();
       } else {
         if (this.zoomedOut) {
-          this.world?.onPolygonClick(
-            // @ts-ignore
-            (polygon: IGeoJSONFeature, event, coords: IGeoCoords3) => {
-              const key = polygon.properties?.wikidataid;
-
-              Earth_OnClick(this, polygon as IGeoJSONFeature, event, coords);
-              if (key in DICT_GLOBE_ORIGINS) {
-                this.ui.resetInputs();
-                this.resetRoutes();
-              }
-            }
+          this.world?.onPolygonClick((polygon, event, coords) =>
+            Earth_OnPolygonClick(
+              this,
+              polygon as IGeoJSONFeature,
+              event,
+              coords
+            )
           );
         }
         Earth_TurnOnColors(this);

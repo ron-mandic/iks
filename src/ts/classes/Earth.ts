@@ -13,6 +13,7 @@ import {
 import { IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
 import {
   $,
+  Earth_Animate,
   Earth_ConfigureArcs,
   Earth_ConfigurePaths,
   Earth_ConfigurePoints,
@@ -74,18 +75,7 @@ export class Earth {
         .then((data: IGeoJSON) => this.render(data))
         .catch((error) => console.error('onGlobeReady: ', error));
 
-      this.timeline.fromTo(
-        '.container',
-        { translateX: '-150%' },
-        { translateX: '0%', duration: 1.5, delay: 4.5, ease: 'power2.inOut' }
-      );
-
-      // Hint: Any altitude above ZOOM_POV_MAX will trigger this.world!.onZoom()
-      // Hint: Only then will the colors specified for the states be activated at the following click event
-      this.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 5500);
-      setTimeout(() => {
-        this.ui.currentView.querySelector('.chart')!.classList.add('on');
-      }, 6000);
+      this.world!.enablePointerInteraction(false);
     });
   }
 
@@ -103,8 +93,6 @@ export class Earth {
     window.addEventListener('resize', () => Earth_OnResize(this.world!));
     this.onZoom();
 
-    // ########################################
-    // this.world!.pauseAnimation();
     console.log(this);
   }
 
@@ -120,6 +108,13 @@ export class Earth {
       this.ui.resetScrollState();
       this.resetRoutes();
       // this.world!.pointOfView({ lat: 0, lng: 20, altitude: 4 }, 5500);
+    });
+
+    this.ui.onStart(() => {
+      this.world!.enablePointerInteraction(true);
+
+      this.ui.unClip();
+      Earth_Animate(this);
     });
   }
 
@@ -140,15 +135,17 @@ export class Earth {
   onZoom() {
     this.world!.onZoom((pov) => {
       if (pov.altitude > ZOOM_POV_MAX) {
-        if (!this.zoomedOut) this.world?.onPolygonClick(() => false);
-        Earth_TurnOffColors(this);
+        if (!this.zoomedOut) {
+          this.world?.onPolygonClick(() => false);
 
-        this.world!.polygonsData(
-          Earth_FilterData(this.data!, 'default') as object[]
-        );
-        this.ui.resetInputs();
-        this.ui.reset();
-        this.resetRoutes();
+          this.world!.polygonsData(
+            Earth_FilterData(this.data!, 'default') as object[]
+          );
+          this.ui.resetInputs();
+          this.ui.reset();
+          this.resetRoutes();
+        }
+        Earth_TurnOffColors(this);
       } else {
         if (this.zoomedOut) {
           this.world?.onPolygonClick((polygon, event, coords) =>

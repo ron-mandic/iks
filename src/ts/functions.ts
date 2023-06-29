@@ -413,6 +413,21 @@ function Earth_DisplayRoutes(key: string, world: GlobeInstance) {
     .ringRepeatPeriod('repeatPeriod');
 }
 
+function Earth_Animate(earth: Earth) {
+  earth.timeline.fromTo(
+    '.container',
+    { translateX: '-150%' },
+    { translateX: '0%', duration: 1.5, delay: 4.5, ease: 'power2.inOut' }
+  );
+
+  // Hint: Any altitude above ZOOM_POV_MAX will trigger this.world!.onZoom()
+  // Hint: Only then will the colors specified for the states be activated at the following click event
+  earth.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 5500);
+  setTimeout(() => {
+    earth.ui.currentView.querySelector('.chart')!.classList.add('on');
+  }, 6000);
+}
+
 // UI #################################################################################
 function UI_TriggerCanvas(target: HTMLInputElement, ui: UI) {
   const earth = ui.parent as Earth;
@@ -581,6 +596,7 @@ export {
   Earth_TurnOnColors,
   Earth_TurnOffColors,
   Earth_ResetState,
+  Earth_Animate,
   UI_TriggerCanvas,
   UI_TriggerPointOfView,
 };

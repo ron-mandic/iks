@@ -2,6 +2,7 @@ import { Earth } from './Earth.ts';
 import { EWikiData } from '../enum.ts';
 import { DICT_GLOBE_ORIGINS } from '../dictionary.ts';
 import { UI_TriggerCanvas, UI_TriggerPointOfView } from '../functions.ts';
+import $ from 'jquery';
 
 export class UI {
   ref: HTMLElement;
@@ -16,6 +17,8 @@ export class UI {
   arrTabs;
   currentKey: string;
   currentView: HTMLElement;
+
+  trigger: HTMLElement;
 
   constructor(ref: HTMLElement, earth: Earth) {
     this.ref = ref;
@@ -65,6 +68,8 @@ export class UI {
 
     this.currentKey = 'c-0';
     this.currentView = this.ref.querySelector('#c-0')!;
+
+    this.trigger = document.querySelector('.trigger')!;
 
     this.initClickEvents();
   }
@@ -123,5 +128,21 @@ export class UI {
           behavior: 'smooth',
         })
       : (this.ref.querySelector('.container')!.scrollTop = 0);
+  }
+
+  unClip() {
+    $('.clipped').css('opacity', '1');
+    $('.clipped').css('clip-path', 'polygon(0 100%, 100% 100%, 100% 0%, 0 0%)');
+    $(
+      '.logo img, .clip-container h1, .clip-container hr, .clip-container img.trigger'
+    ).addClass('out');
+    $('.slider_inner').addClass('in');
+    setTimeout(function () {
+      $('.slider_inner').click();
+    }, 2500);
+  }
+
+  onStart(callback: () => void) {
+    this.trigger.addEventListener('click', callback);
   }
 }

@@ -16,6 +16,7 @@ import {
   IGeoCoords3,
   IGeoJSON,
   IGeoJSONFeature,
+  IHTMLMarkerObject,
 } from './interfaces.ts';
 import {
   GLOBE_DATA_ARCS,
@@ -35,6 +36,7 @@ import {
 import { EWikiData } from './enum.ts';
 import { Earth } from './classes/Earth.ts';
 import { UI } from './classes/UI.ts';
+import svgPerson from '/person.svg';
 
 // General #################################################################################
 
@@ -127,6 +129,29 @@ function Earth_ConfigurePoints(world: GlobeInstance) {
     .pointsTransitionDuration(1000)
     .pointColor('color')
     .pointRadius('radius');
+}
+
+function Earth_ConfigureMarkers(world: GlobeInstance) {
+  const { lat, lng } = GLOBE_DATA_GEO[EWikiData.SYRIA];
+  // @ts-ignore
+  world
+    .htmlElementsData([
+      {
+        lat,
+        lng,
+        size: 35,
+      },
+    ])
+    // @ts-ignore
+    .htmlElement((obj: IHTMLMarkerObject) => {
+      const img = document.createElement('img');
+      img.src = svgPerson;
+      img.style.width = `${obj.size}px`;
+
+      img.style.pointerEvents = 'auto';
+      img.style.cursor = 'pointer';
+      return img;
+    });
 }
 
 function Earth_Customize(world: GlobeInstance) {
@@ -376,10 +401,12 @@ function Earth_TurnOffColors(earth: Earth) {
 
 function Earth_ResetState(
   earth: Earth,
+  // @ts-ignore
   coords?: IGeoCoords2,
+  // @ts-ignore
   event?: MouseEvent
 ) {
-  console.log(coords, event);
+  // console.log(coords, event);
 
   if (earth.selectedCountry) earth.selectedCountry = null;
 
@@ -586,6 +613,7 @@ export {
   Earth_ConfigurePaths,
   Earth_ConfigureRings,
   Earth_ConfigurePoints,
+  Earth_ConfigureMarkers,
   Earth_Customize,
   Earth_FilterData,
   Earth_FilterArcs,

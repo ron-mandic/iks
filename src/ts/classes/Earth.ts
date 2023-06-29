@@ -7,7 +7,7 @@ import {
   GLOBE_BUMP_IMAGE_PATH,
   GLOBE_CAP_MATERIAL_PATH,
   GLOBE_GEO_MEDIUM_JSON_PATH,
-  GLOBE_IMAGE_8K_PATH,
+  GLOBE_IMAGE_ART_8K_PATH,
   ZOOM_POV_MAX,
 } from '../constants.ts';
 import { IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
@@ -15,6 +15,7 @@ import {
   $,
   Earth_Animate,
   Earth_ConfigureArcs,
+  Earth_ConfigureMarkers,
   Earth_ConfigurePaths,
   Earth_ConfigurePoints,
   Earth_ConfigurePolygons,
@@ -49,7 +50,7 @@ export class Earth {
 
   constructor(selector: string, configOptions?: ConfigOptions) {
     this.world = Globe(configOptions)(document.querySelector(selector)!)
-      .globeImageUrl(GLOBE_IMAGE_8K_PATH)
+      .globeImageUrl(GLOBE_IMAGE_ART_8K_PATH)
       .bumpImageUrl(GLOBE_BUMP_IMAGE_PATH)
       .backgroundImageUrl(GLOBE_BACKGROUND_IMAGE_PATH);
 
@@ -108,6 +109,8 @@ export class Earth {
       this.ui.resetScrollState();
       this.resetRoutes();
       // this.world!.pointOfView({ lat: 0, lng: 20, altitude: 4 }, 5500);
+
+      if (!this.zoomedOut) Earth_ConfigureMarkers(this.world!);
     });
 
     this.ui.onStart(() => {
@@ -125,6 +128,7 @@ export class Earth {
     Earth_ConfigurePaths(this.world!);
     Earth_ConfigureRings(this.world!);
     Earth_ConfigurePoints(this.world!);
+    Earth_ConfigureMarkers(this.world!);
 
     Earth_Customize(this.world!);
   }
@@ -148,6 +152,7 @@ export class Earth {
         Earth_TurnOffColors(this);
       } else {
         if (this.zoomedOut) {
+          Earth_ConfigureMarkers(this.world!);
           this.world?.onPolygonClick((polygon, event, coords) =>
             Earth_OnPolygonClick(
               this,
@@ -167,6 +172,7 @@ export class Earth {
     this.world!.pointsData([])
       .pathsData([[[]]])
       .arcsData([])
-      .ringsData([]);
+      .ringsData([])
+      .htmlElementsData([]);
   }
 }

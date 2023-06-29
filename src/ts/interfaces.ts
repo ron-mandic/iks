@@ -58,4 +58,18 @@ interface IGeoCoords3 {
   altitude: number;
 }
 
-export type { IGeoJSON, IGeoJSONFeature, IArc, IGeoCoords2, IGeoCoords3 };
+interface IHTMLMarkerObject {
+  lat: number;
+  lng: number;
+  size: number;
+  color: string;
+}
+
+export type {
+  IGeoJSON,
+  IGeoJSONFeature,
+  IArc,
+  IGeoCoords2,
+  IGeoCoords3,
+  IHTMLMarkerObject,
+};

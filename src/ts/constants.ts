@@ -1,6 +1,7 @@
 // Globe #################################################################################
 const GLOBE_IMAGE_2K_PATH = './2k_earth_daymap.jpg';
 const GLOBE_IMAGE_8K_PATH = './8k_earth_daymap.jpg';
+const GLOBE_IMAGE_ART_8K_PATH = './8k_earth_daymap_art.jpg';
 const GLOBE_BUMP_IMAGE_PATH = './topology.min.png';
 const GLOBE_CAP_MATERIAL_PATH = './mymind-XUlsF9LYeVk-unsplash.jpg';
 const GLOBE_BACKGROUND_IMAGE_PATH = './night-sky.max.darker.png';
@@ -48,6 +49,7 @@ const EARTH_CONFIG_OPTIONS = {
 export {
   GLOBE_IMAGE_2K_PATH,
   GLOBE_IMAGE_8K_PATH,
+  GLOBE_IMAGE_ART_8K_PATH,
   GLOBE_CAP_MATERIAL_PATH,
   GLOBE_BUMP_IMAGE_PATH,
   GLOBE_BACKGROUND_IMAGE_PATH,

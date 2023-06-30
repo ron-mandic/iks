@@ -5,6 +5,8 @@ import gsap from 'gsap';
 const store = {
   ww: window.innerWidth,
   wh: window.innerHeight,
+  aw: window.screen.availWidth,
+  ah: window.screen.availHeight,
   isDevice:
     navigator.userAgent.match(/Android/i) ||
     navigator.userAgent.match(/webOS/i) ||
@@ -445,7 +447,7 @@ class Gl {
   init() {
     const domEl = this.renderer.domElement;
     domEl.classList.add('dom-gl');
-    document.querySelector("#app").appendChild(domEl);
+    document.querySelector('#renderer').appendChild(domEl);
   }
 }
 

@@ -10,6 +10,7 @@ export default defineConfig({
         overview: resolve(__dirname, 'overview/index.html'),
         doaa: resolve(__dirname, 'doaa/index.html'),
         gallery: resolve(__dirname, 'gallery/index.html'),
+        news: resolve(__dirname, 'news/index.html'),
         // ... and so on
         playground: resolve(__dirname, 'playground/index.html'),
         alt: resolve(__dirname, 'alt/index.html'),

@@ -2023,6 +2023,22 @@ const GLOBE_DATA_GEO = {
   },
 };
 
+const GLOBE_DATA_NEWS = {
+  [EWikiData.SUDAN]: { ...GLOBE_DATA_GEO[EWikiData.SUDAN] },
+  [EWikiData.MYANMAR]: { ...GLOBE_DATA_GEO[EWikiData.MYANMAR] },
+  [EWikiData.DR_CONGO]: { ...GLOBE_DATA_GEO[EWikiData.DR_CONGO] },
+  [EWikiData.ITALY]: {
+    lat: 41.87194,
+    lng: 12.56738,
+    altitude: 0.375,
+  },
+  [EWikiData.GREECE]: {
+    lat: 39.074208,
+    lng: 21.824312,
+    altitude: 0.375,
+  },
+};
+
 export {
   DATA_REFUGEES_2021_WORLD,
   DATA_REFUGEES_2021_SYR,
@@ -2036,4 +2052,5 @@ export {
   GLOBE_DATA_POINTS,
   GLOBE_DATA_RINGS,
   GLOBE_DATA_GEO,
+  GLOBE_DATA_NEWS,
 };

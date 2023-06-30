@@ -484,6 +484,9 @@ footer a {
   margin: 0 auto;
   text-align: center;
 
+  &:hover {
+    cursor: pointer;
+  }
   &:visited {
     background-color: #204a8c;
   }
@@ -564,6 +567,9 @@ p.causes {
   color: white;
   padding: 1rem 2rem;
   margin-top: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .image-container {

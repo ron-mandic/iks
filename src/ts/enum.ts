@@ -35,6 +35,9 @@ enum EWikiData {
   RWANDA = 'Q1037',
   ZAMBIA = 'Q953',
   TANZANIA = 'Q924',
+  // Wikidataid for Sudan, Italy and Greece
+  ITALY = 'Q38',
+  GREECE = 'Q41',
 }
 
 enum EISO_A3 {

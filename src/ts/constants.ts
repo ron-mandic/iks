@@ -1,13 +1,13 @@
 // Globe #################################################################################
 const GLOBE_IMAGE_2K_PATH = './2k_earth_daymap.jpg';
-const GLOBE_IMAGE_8K_PATH = './8k_earth_daymap.jpg';
-const GLOBE_IMAGE_ART_8K_PATH = './8k_earth_daymap_art.jpg';
-const GLOBE_BUMP_IMAGE_PATH = './topology.min.png';
+const GLOBE_IMAGE_8K_PATH = '/8k_earth_daymap.jpg';
+const GLOBE_IMAGE_ART_8K_PATH = '/8k_earth_daymap_art.jpg';
+const GLOBE_BUMP_IMAGE_PATH = '/topology.min.png';
 const GLOBE_CAP_MATERIAL_PATH = './mymind-XUlsF9LYeVk-unsplash.jpg';
-const GLOBE_BACKGROUND_IMAGE_PATH = './night-sky.max.darker.png';
-const GLOBE_GEO_LOW_JSON_PATH = './data/custom.geo.low.json';
-const GLOBE_GEO_MEDIUM_JSON_PATH = './data/custom.geo.medium.json';
-const GLOBE_TEXTURE_PATH = './earth-water.low.png';
+const GLOBE_BACKGROUND_IMAGE_PATH = '/night-sky.max.darker.png';
+const GLOBE_GEO_LOW_JSON_PATH = '/data/custom.geo.low.json';
+const GLOBE_GEO_MEDIUM_JSON_PATH = '/data/custom.geo.medium.json';
+const GLOBE_TEXTURE_PATH = '/earth-water.low.png';
 
 // Polygon #################################################################################
 const POLYGON_COLOR_CAP_ORIGIN_COUNTRY = '#fffcc4';

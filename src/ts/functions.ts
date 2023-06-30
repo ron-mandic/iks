@@ -21,6 +21,7 @@ import {
 import {
   GLOBE_DATA_ARCS,
   GLOBE_DATA_GEO,
+  GLOBE_DATA_NEWS,
   GLOBE_DATA_PATHS,
   GLOBE_DATA_POINTS,
   GLOBE_DATA_RINGS,
@@ -37,6 +38,7 @@ import { EWikiData } from './enum.ts';
 import { Earth } from './classes/Earth.ts';
 import { UI } from './classes/UI.ts';
 import svgPerson from '/person.svg';
+import { SimpleEarth } from './classes/SimpleEarth.ts';
 
 // General #################################################################################
 // Earth.ts #################################################################################
@@ -160,6 +162,11 @@ function Earth_FilterData(data: IGeoJSON, key: string, includeOrigins = true) {
     case 'default': {
       return data.features.filter(
         (d: IGeoJSONFeature) => d.properties?.wikidataid in DICT_GLOBE_ORIGINS
+      );
+    }
+    case 'default:news': {
+      return data.features.filter(
+        (d: IGeoJSONFeature) => d.properties?.wikidataid in GLOBE_DATA_NEWS
       );
     }
     case EWikiData.SYRIA: {
@@ -305,7 +312,7 @@ function Earth_OnClick(
 }
 
 function Earth_OnPolygonClick(
-  earth: Earth,
+  earth: Earth | SimpleEarth,
   polygon: IGeoJSONFeature,
   event: MouseEvent,
   coords: IGeoCoords3

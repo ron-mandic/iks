@@ -83,26 +83,6 @@ export class SimpleEarth {
   }
 
   initEvents() {
-    // @ts-ignore
-    this.world?.onPolygonClick((polygon: IGeoJSONFeature, event, coords) => {
-      if (this.selectedCountry !== polygon.properties.wikidataid) {
-        this.selectedCountry = polygon.properties.wikidataid;
-      }
-
-      // @ts-ignore
-      Earth_OnSelect(this, polygon /* event, coords */);
-
-      const { lat, lng } = coords;
-      if (this.selectedCountry in DICT_GLOBE_ORIGINS)
-        this.world!.pointOfView({ lat, lng, altitude: 0.675 }, 1750);
-    });
-
-    this.world?.onGlobeClick((coords, event) => {
-      // @ts-ignore
-      Earth_ResetState(this, coords, event);
-      this.resetRoutes();
-    });
-
     this.world!.enablePointerInteraction(true);
   }
 
@@ -130,16 +110,6 @@ export class SimpleEarth {
         }
         Earth_TurnOffColors(this);
       } else {
-        if (this.zoomedOut) {
-          this.world?.onPolygonClick((polygon, event, coords) =>
-            Earth_OnPolygonClick(
-              this,
-              polygon as IGeoJSONFeature,
-              event,
-              coords
-            )
-          );
-        }
         Earth_TurnOnColors(this);
       }
     });

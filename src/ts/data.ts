@@ -2030,12 +2030,12 @@ const GLOBE_DATA_NEWS = {
   [EWikiData.ITALY]: {
     lat: 41.87194,
     lng: 12.56738,
-    altitude: 0.375,
+    altitude: 0.275,
   },
   [EWikiData.GREECE]: {
     lat: 39.074208,
     lng: 21.824312,
-    altitude: 0.375,
+    altitude: 0.325,
   },
 };
 

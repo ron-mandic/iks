@@ -445,7 +445,7 @@ class Gl {
   init() {
     const domEl = this.renderer.domElement;
     domEl.classList.add('dom-gl');
-    document.body.appendChild(domEl);
+    document.querySelector("#app").appendChild(domEl);
   }
 }
 

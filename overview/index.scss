@@ -183,7 +183,7 @@ a::after {
   content: " " attr(data-suffix);
 }
 
-@media only screen and (max-width: 1919px) {
+/* @media only screen and (max-width: 1919px) {
   body::after {
     content: "Please choose a screen width larger than 1920px";
     position: absolute;
@@ -206,9 +206,4 @@ a::after {
     display: none;
     pointer-events: none;
   }
-
-  canvas {
-    display: none;
-    pointer-events: none;
-  }
-}
+}*/

@@ -1,7 +1,6 @@
 import Barba from '@barba/core';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { $ } from '../src/ts/functions';
 
 const store = {
   ww: window.innerWidth,
@@ -305,7 +304,7 @@ class Slider {
     state.target = off + moveX * this.opts.speed;
 
     const heading = document.querySelector('h1');
-    const anchor = $('a') as HTMLLinkElement;
+    const anchor = document.querySelector('a') as HTMLAnchorElement;
 
     let scrollX =
       ((Math.abs(state.target) / 2) % window.innerWidth) +

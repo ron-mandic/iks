@@ -12,7 +12,6 @@ import {
 } from '../constants.ts';
 import { IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
 import {
-  $,
   Earth_Animate,
   Earth_ConfigureArcs,
   Earth_ConfigureMarkers,
@@ -66,7 +65,7 @@ export class Earth {
     this.uiRevealed = false;
     this.zoomedOut = false;
 
-    this.ui = new UI($('#ui') as HTMLElement, this);
+    this.ui = new UI(document.querySelector('#ui') as HTMLElement, this);
 
     this.timeline = gsap.timeline();
 

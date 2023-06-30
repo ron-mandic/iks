@@ -39,15 +39,6 @@ import { UI } from './classes/UI.ts';
 import svgPerson from '/person.svg';
 
 // General #################################################################################
-
-function $(selectors: string): Element | null {
-  return document.querySelector(selectors);
-}
-
-function $$(selectors: string): NodeListOf<Element> {
-  return document.querySelectorAll(selectors);
-}
-
 // Earth.ts #################################################################################
 function Earth_OnResize(world: GlobeInstance) {
   if (!world) return;
@@ -603,8 +594,6 @@ function UI_TriggerPointOfView(e: Event, world: GlobeInstance) {
 }
 
 export {
-  $,
-  $$,
   Earth_OnResize,
   Earth_SetMaterial,
   Earth_SetLight,

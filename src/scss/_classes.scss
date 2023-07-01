@@ -46,6 +46,11 @@
   align-items: flex-end;
 }
 
+.c-fs {
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .is-truncate {
   white-space: nowrap;
   text-overflow: ellipsis;

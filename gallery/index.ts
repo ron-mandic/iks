@@ -9,13 +9,6 @@ let count = 0;
 const arrCount = [];
 const dictTiles = {};
 
-function paint(arr, el) {
-  for (let i = 0; i < 9; i++) {
-    if (arr[i]) el.children[i].setAttribute('data-label', arr[i]);
-    else el.children[i].removeAttribute('data-label');
-  }
-}
-
 function areAllConsecutive(arr, sorted = false) {
   let array = sorted ? arr.sort((a, b) => a - b) : arr;
   for (let i = 0; i < array.length - 1; i++) {
@@ -43,7 +36,7 @@ tiles.forEach((tile) => {
     console.log(arrCount);
     // paint(arrCount, aside);
 
-    heading.style.filter = `blur(${9 * 0.2 - count * 0.2}vmax)`;
+    heading.style.filter = `blur(${8 * 0.2 - count * 0.2}vmax)`;
 
     if (arrCount.length === 9 && areAllConsecutive(arrCount)) {
       // anchor.classList.remove('disabled');

@@ -22,7 +22,8 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 12vmax;
+  font-size: 10vmax;
+  white-space: nowrap;
   filter: blur(1.8vmax);
   transition: filter 300ms ease;
   &.false {
@@ -34,9 +35,9 @@ h1 {
   border-radius: 1vmax;
   position: absolute;
   transition: transform 800ms ease;
-  background-color: rgb(121, 138, 232);
+  background-color: #eef1ee; // rgb(197, 202, 232)
 
-  &.selected::before {
+  /* &.selected::before {
     content: attr(data-id);
     color: rgb(204, 208, 232);
     padding: 1rem 1.75rem;
@@ -59,7 +60,7 @@ h1 {
     inset: unset;
     top: 0.75rem;
     left: 0.75rem;
-  }
+  } */
 }
 
 .tile:hover {
@@ -217,7 +218,7 @@ img:has(+ .modal:not(.off)) {
 a {
   position: fixed;
   left: 50%;
-  bottom: 5%;
+  bottom: 2rem;
   translate: -50% 0;
   padding: 2rem 2rem;
   color: #fff;
@@ -345,7 +346,7 @@ aside {
   border: 1px solid rgba(121, 138, 232, 0.5);
   border-radius: 50%;
 
-  &::before {
+  /* &::before {
     content: attr(data-label);
     position: absolute;
     left: 50%;
@@ -353,5 +354,5 @@ aside {
     translate: -50% -50%;
     font-size: 1.25rem;
     color: #fff;
-  }
+  } */
 }

@@ -10,3 +10,12 @@ function setup() {
 }
 
 setup();
+
+window.addEventListener('scroll', function () {
+  // get scroll height
+  let svg = document.querySelector('svg');
+  let percentage =
+    (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+
+  svg!.style.strokeDasharray = `${percentage * 100} ${100 - percentage * 100}`;
+});

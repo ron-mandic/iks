@@ -4,3 +4,12 @@
 @use "scss/_queries.scss";
 @use "scss/_general.scss";
 @use "scss/_ui.scss";
+
+#circle {
+  width: 50px;
+  height: auto;
+  position: fixed;
+  bottom: 2rem;
+  right: 2.5rem;
+  z-index: 1000;
+}

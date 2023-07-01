@@ -55,6 +55,14 @@ function moveToViewBy(percent) {
 }
 
 handleArea.addEventListener('click', () => {
+  blogHeaderContainer.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+  setTimeout(() => {
+    earth.world!.pointOfView({ lat: 0, lng: 20, altitude: 8 }, 2500);
+  }, 2000);
+
   if (!hasIntroduced)
     setTimeout(() => {
       let { lat, lng } = GLOBE_DATA_NEWS[currentID];
@@ -82,7 +90,7 @@ handleArea.addEventListener('click', () => {
   } else {
     timeline
       .to('#ui', {
-        translateX: '-95%',
+        translateX: '-96.375%',
         duration: 1.5,
         ease: 'power2.inOut',
       })

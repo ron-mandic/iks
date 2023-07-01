@@ -494,7 +494,16 @@ function UI_TriggerCanvas(target: HTMLInputElement, ui: UI) {
             Earth_FilterData(earth.data!, `${key}:mr`) as object[]
           )
           .polygonAltitude(POLYGON_ALTITUDE)
-          .polygonCapColor(() => '#3a86ff44')
+          // @ts-ignore
+          .polygonCapColor((d: IGeoJSONFeature) => {
+            let key = d.properties.wikidataid;
+
+            if (key in DICT_GLOBE_ORIGINS) {
+              return '#3a86ff44';
+            }
+
+            return '#ffffff44';
+          })
           .polygonStrokeColor(() => '#999776');
       }
       break;

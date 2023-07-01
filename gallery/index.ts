@@ -3,7 +3,7 @@ import { geoNaturalEarth1 } from 'd3';
 const tiles = document.querySelectorAll('.tile');
 const heading = document.querySelector('h1');
 const anchor = document.querySelector('a');
-const aside = document.querySelector('aside');
+// const aside = document.querySelector('aside');
 
 let count = 0;
 const arrCount = [];
@@ -41,28 +41,18 @@ tiles.forEach((tile) => {
     }
 
     console.log(arrCount);
-    paint(arrCount, aside);
+    // paint(arrCount, aside);
 
     heading.style.filter = `blur(${9 * 0.2 - count * 0.2}vmax)`;
 
     if (arrCount.length === 9 && areAllConsecutive(arrCount)) {
-      anchor.classList.remove('disabled');
-      aside.classList.add('disabled');
+      // anchor.classList.remove('disabled');
+      // aside.classList.add('disabled');
     } else {
-      if (!anchor.classList.contains('disabled'))
-        anchor.classList.add('disabled');
-
-      if (!aside.classList.contains('disabled') && arrCount.length === 9)
-        aside.classList.add('disabled');
-
-      if (arrCount.length === 9) {
-        heading.classList.add('false');
-        aside.classList.add('false');
-        setTimeout(() => {
-          heading.classList.remove('false');
-          aside.classList.remove('false');
-        }, 1000);
-      }
+      /* if (!anchor.classList.contains('disabled'))
+        anchor.classList.add('disabled'); */
+      /* if (!aside.classList.contains('disabled') && arrCount.length === 9)
+        aside.classList.add('disabled'); */
     }
   });
   tile.addEventListener('dblclick', () => {

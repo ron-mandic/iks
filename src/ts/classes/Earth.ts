@@ -114,6 +114,13 @@ export class Earth {
     this.ui.onStart(() => {
       this.world!.enablePointerInteraction(true);
 
+      let circle = document.querySelector('#circle') as HTMLElement;
+      setTimeout(() => {
+        circle!.style.zIndex = '0';
+        circle!.style.opacity = '0';
+        circle!.style.pointerEvents = 'none';
+      }, 1000);
+
       this.ui.unClip();
       Earth_Animate(this);
     });

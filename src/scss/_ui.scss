@@ -13,11 +13,16 @@ h1 {
   font-size: clamp(1.5rem, 150px, 4vh);
 }
 
+h2.h2 {
+  font-size: 150%;
+  padding-left: 1rem;
+}
+
 .container {
   position: relative;
-  width: clamp(300px, 22.5vw, 2560px);
+  width: clamp(300px, 24.5vw, 2560px);
   min-height: 600px;
-  height: 90vh;
+  height: 60vh;
   background-color: rgb(10, 10, 10);
   border-radius: 0.25vw;
   backdrop-filter: blur(0.5vw);
@@ -66,7 +71,7 @@ header {
   left: 0;
   right: 0;
   width: 100%;
-  padding: 0 4% 2%;
+  padding: 0 3% 2%;
   backdrop-filter: blur(1vw);
   background-color: rgba(10, 10, 10, 0.5);
   border-bottom: 0.1vw solid rgba(61, 61, 61, 0.25);
@@ -179,7 +184,7 @@ footer {
   height: clamp(240px, 15vh, 1440px);
   padding: 1% 1.25% 5%;
   gap: 0.25vw;
-  margin: 2vh 0 5vh;
+  margin: 2vh 0 4vh;
   background-color: rgba(10, 10, 10, 0.75);
 }
 
@@ -510,6 +515,19 @@ footer a {
     }
   }
 }
+
+.trigger-container {
+  width: 100%;
+  display: flex;
+}
+
+button.trigger {
+  margin: 0 auto;
+  scale: 1.5;
+  animation: none !important;
+  transition: none !important;
+}
+
 .trigger {
   opacity: 0;
   -webkit-animation: fade 1s 2.5s forwards;
@@ -553,15 +571,25 @@ p.causes {
   padding: 2rem;
 }
 
+.frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .frame p {
-  width: 50%;
-  font-size: 2rem;
+  width: 75%;
+  font-size: 3rem;
   letter-spacing: -0.05em;
   color: #fdfbf6;
 }
 
 .trigger {
   all: unset;
+  position: absolute;
+  left: 50%;
+  bottom: 3rem;
+  transform: translateX(-50%);
   background-color: #3a86ff;
   color: white;
   padding: 1rem 2rem;

@@ -13,7 +13,7 @@ html {
   left: -3.25rem;
   z-index: 1;
   color: black;
-  translate: -95% -50%;
+  translate: -96.375% -50%;
 }
 
 body {
@@ -43,11 +43,11 @@ body {
 .blog {
   background-color: #e9e6e4;
   display: grid;
+  width: 1400px;
   height: 100vh;
   overflow: hidden;
   grid-template-columns: 5% 65% 29%;
   grid-template-rows: 100%;
-  width: 100%;
   padding: 40px 4px;
   position: relative;
   border-top-right-radius: 0.75rem;
@@ -529,11 +529,5 @@ marquee span:before {
   }
   .blog_article a {
     padding-top: 0;
-  }
-}
-
-@media screen and (max-width: 1920px) {
-  .blog {
-    max-width: 1000px;
   }
 }

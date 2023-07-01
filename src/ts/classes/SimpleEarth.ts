@@ -9,19 +9,15 @@ import {
   GLOBE_IMAGE_8K_PATH,
   ZOOM_POV_MAX,
 } from '../constants.ts';
-import { IGeoJSON, IGeoJSONFeature } from '../interfaces.ts';
+import { IGeoJSON } from '../interfaces.ts';
 import {
   Earth_ConfigurePolygons,
   Earth_Customize,
   Earth_FilterData,
-  Earth_OnPolygonClick,
   Earth_OnResize,
-  Earth_OnSelect,
-  Earth_ResetState,
   Earth_TurnOffColors,
   Earth_TurnOnColors,
 } from '../functions.ts';
-import { DICT_GLOBE_ORIGINS } from '../dictionary.ts';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -108,8 +104,10 @@ export class SimpleEarth {
           );
           this.resetRoutes();
         }
+        // @ts-ignore
         Earth_TurnOffColors(this);
       } else {
+        // @ts-ignore
         Earth_TurnOnColors(this);
       }
     });

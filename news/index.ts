@@ -25,13 +25,13 @@ function moveToViewBy(percent) {
     earth.world!.pointOfView({ lat, lng, altitude: 0.55 }, 2500);
   } else if (
     percent > 0.2 &&
-    percent <= 0.4 &&
+    percent <= 0.45 &&
     currentID !== EWikiData.GREECE
   ) {
     currentID = EWikiData.GREECE;
     earth.world!.pointOfView(GLOBE_DATA_NEWS[currentID], 2500);
   } else if (
-    percent > 0.4 &&
+    percent > 0.45 &&
     percent <= 0.6 &&
     currentID !== EWikiData.MYANMAR
   ) {

@@ -522,7 +522,7 @@ marquee span:before {
 
 @media screen and (max-width: 1536px) {
   .blog {
-    max-width: 850px;
+    max-width: 1050px;
   }
   .blog_article p {
     font-size: 85%;
@@ -530,4 +530,8 @@ marquee span:before {
   .blog_article a {
     padding-top: 0;
   }
+}
+
+canvas {
+  cursor: none !important;
 }

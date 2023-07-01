@@ -5,7 +5,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import {
   GLOBE_BACKGROUND_IMAGE_PATH,
   GLOBE_BUMP_IMAGE_PATH,
-  GLOBE_CAP_MATERIAL_PATH,
   GLOBE_GEO_MEDIUM_JSON_PATH,
   GLOBE_IMAGE_ART_8K_PATH,
   ZOOM_POV_MAX,
@@ -40,7 +39,7 @@ export class Earth {
   data: IGeoJSON | null;
   selectedCountry: string | null;
 
-  capTexture: THREE.Texture | null;
+  // capTexture: THREE.Texture | null;
   uiRevealed: boolean;
   zoomedOut: boolean;
 
@@ -57,7 +56,7 @@ export class Earth {
     this.Scene = this.world!.scene();
     this.Camera = this.world!.camera();
 
-    this.capTexture = new THREE.TextureLoader().load(GLOBE_CAP_MATERIAL_PATH);
+    // this.capTexture = new THREE.TextureLoader().load(GLOBE_CAP_MATERIAL_PATH);
 
     this.data = null;
     this.selectedCountry = null;

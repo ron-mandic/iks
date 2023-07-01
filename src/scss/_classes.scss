@@ -48,10 +48,15 @@
 .no-select {
   user-select: none;
 }
+
 .no-scroll-x {
   overflow-x: hidden;
 }
 
 .no-scroll-y {
   overflow-y: hidden;
+}
+
+.mask {
+  overflow: hidden;
 }

@@ -17,10 +17,49 @@
   position: absolute;
 }
 
+h1 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12vmax;
+  filter: blur(1.8vmax);
+  transition: filter 300ms ease;
+  &.false {
+    animation: vibrate 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+}
+
 .tile {
   border-radius: 1vmax;
   position: absolute;
   transition: transform 800ms ease;
+  background-color: rgb(121, 138, 232);
+
+  &.selected::before {
+    content: attr(data-id);
+    color: rgb(204, 208, 232);
+    padding: 1rem 1.75rem;
+    top: 0.75rem;
+    left: 0.75rem;
+    border-radius: 50%;
+    position: absolute;
+    font-size: 150%;
+    font-weight: bold;
+    z-index: 1000;
+    background-color: rgb(121, 138, 232);
+  }
+
+  &.selected:has(.modal.landscape.left)::before {
+    inset: unset;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+  &.selected:has(.modal.landscape.right)::before {
+    inset: unset;
+    top: 0.75rem;
+    left: 0.75rem;
+  }
 }
 
 .tile:hover {
@@ -42,8 +81,12 @@
   transition: opacity 800ms ease, transform 800ms ease;
 }
 
+.tile.visited > img,
+img:has(+ .modal:not(.off)) {
+  opacity: 1;
+}
+
 .tile:nth-child(1) {
-  background-color: rgb(63, 81, 181);
   height: 24%;
   width: 14%;
   left: 42%;
@@ -51,7 +94,6 @@
 }
 
 .tile:nth-child(2) {
-  background-color: rgb(63, 81, 181);
   height: 14%;
   width: 20%;
   left: 5%;
@@ -59,7 +101,6 @@
 }
 
 .tile:nth-child(3) {
-  background-color: rgb(63, 81, 181);
   height: 18%;
   width: 16%;
   left: 12%;
@@ -67,15 +108,13 @@
 }
 
 .tile:nth-child(4) {
-  background-color: rgb(63, 81, 181);
   height: 24%;
-  width: 24%;
-  left: 68%;
-  top: 8%;
+  width: 20%;
+  left: 80%;
+  top: 3%;
 }
 
 .tile:nth-child(5) {
-  background-color: rgb(63, 81, 181);
   height: 16%;
   width: 32%;
   left: 8%;
@@ -83,7 +122,6 @@
 }
 
 .tile:nth-child(6) {
-  background-color: rgb(63, 81, 181);
   height: 14%;
   width: 12%;
   left: 45%;
@@ -91,7 +129,6 @@
 }
 
 .tile:nth-child(7) {
-  background-color: rgb(63, 81, 181);
   height: 24%;
   width: 18%;
   left: 72%;
@@ -99,7 +136,6 @@
 }
 
 .tile:nth-child(8) {
-  background-color: rgb(63, 81, 181);
   height: 16%;
   width: 20%;
   left: 50%;
@@ -107,9 +143,215 @@
 }
 
 .tile:nth-child(9) {
-  background-color: rgb(63, 81, 181);
   height: 10%;
   width: 8%;
   left: 84%;
   top: 84%;
+}
+
+.modal {
+  --inset: 0.5rem;
+
+  position: absolute;
+  inset: var(--inset);
+  z-index: 20;
+  background-color: #fdfbf6;
+  border: 1px solid #ffe9b7;
+  color: #1a1919;
+  pointer-events: none;
+  border-radius: 0.5rem;
+
+  padding: 1rem 1.5rem;
+
+  h2 {
+    margin-bottom: 0.5rem;
+    font-size: 240%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  p {
+    line-height: 1.5;
+  }
+}
+
+.modal.landscape {
+  width: calc(50% - calc(var(--inset) * 2));
+  height: calc(100% - calc(var(--inset) * 2));
+  translate: 0 0;
+  transition: translate 800ms ease-in-out;
+
+  &.right {
+    inset: var(--inset) var(--inset) var(--inset) calc(50% + var(--inset));
+  }
+  &.left {
+    inset: var(--inset) calc(50% + var(--inset)) var(--inset) var(--inset);
+  }
+
+  &.off {
+    &.left {
+      translate: calc(-100% - var(--inset)) 0;
+      transition: translate 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    &.right {
+      translate: calc(100% + var(--inset)) 0;
+      transition: translate 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+  }
+}
+
+.modal.portrait {
+  inset: calc(40% + var(--inset)) var(--inset) var(--inset) var(--inset);
+  width: calc(100% - calc(var(--inset) * 2));
+  height: calc(60% - calc(var(--inset) * 2));
+  translate: 0 0;
+  transition: translate 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  &.off {
+    translate: 0 calc(100% + var(--inset));
+    transition: translate 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+}
+
+a {
+  position: fixed;
+  left: 50%;
+  bottom: 5%;
+  translate: -50% 0;
+  padding: 2rem 2rem;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.3s ease-in-out, translate 0.5s ease-in-out,
+    scale 0.5s ease-in-out;
+  background-color: #3a86ff;
+  z-index: 1000;
+  transform-origin: bottom;
+}
+
+a.disabled {
+  scale: 1 1.2;
+  pointer-events: none;
+  opacity: 0.5;
+  translate: -50% 200%;
+  transition: opacity 0.3s ease-in-out, translate 0.5s ease-in-out,
+    scale 0.5s ease-in-out;
+}
+
+@keyframes vibrate {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  10% {
+    transform: translate(-58%, -50%);
+  }
+  20% {
+    transform: translate(-46%, -50%);
+  }
+  30% {
+    transform: translate(-52%, -50%);
+  }
+  40% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-52%, -50%);
+  }
+  60% {
+    transform: translate(-50%, -50%);
+  }
+  70% {
+    transform: translate(-52%, -50%);
+  }
+  80% {
+    transform: translate(-50%, -50%);
+  }
+  90% {
+    transform: translate(-52%, -50%);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes vibrate-aside {
+  0% {
+    translate: -50% 0;
+  }
+  10% {
+    translate: -58% 0;
+  }
+  20% {
+    translate: -46% 0;
+  }
+  30% {
+    translate: -52% 0;
+  }
+  40% {
+    translate: -50% 0;
+  }
+  50% {
+    translate: -52% 0;
+  }
+  60% {
+    translate: -50% 0;
+  }
+  70% {
+    translate: -52% 0;
+  }
+  80% {
+    translate: -50% 0;
+  }
+  90% {
+    translate: -52% 0;
+  }
+  100% {
+    translate: -50% 0;
+  }
+}
+
+aside {
+  position: fixed;
+  left: 50%;
+  bottom: 0.25rem;
+  width: 100%;
+  max-width: 450px;
+  height: calc(35px + 1rem + 1rem);
+  translate: -50% 0;
+  pointer-events: auto;
+  padding: 1rem 1rem;
+  background-color: rgba(121, 138, 232, 0.4);
+  backdrop-filter: blur(1rem);
+  border-radius: 2.25rem;
+  z-index: 1000;
+  transition: translate 0.25s ease-in-out;
+
+  &.disabled {
+    translate: -50% 200%;
+    transition: translate 0.5s ease-in-out;
+  }
+
+  &.false {
+    animation: vibrate-aside 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+}
+
+.box {
+  position: relative;
+  flex: 1;
+  max-width: 35px;
+  height: 100%;
+  background-color: rgba(121, 138, 232, 0.05);
+  border: 1px solid rgba(121, 138, 232, 0.5);
+  border-radius: 50%;
+
+  &::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    font-size: 1.25rem;
+    color: #fff;
+  }
 }

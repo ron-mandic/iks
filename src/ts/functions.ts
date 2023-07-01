@@ -319,12 +319,15 @@ function Earth_OnPolygonClick(
 ) {
   const key = polygon.properties?.wikidataid;
 
+  // @ts-ignore
   Earth_OnClick(earth, polygon as IGeoJSONFeature, event, coords);
   if (key in DICT_GLOBE_ORIGINS) {
+    // @ts-ignore
     earth.ui.resetInputs();
     earth.resetRoutes();
   }
 
+  // @ts-ignore
   earth.ui.resetScrollState();
 }
 

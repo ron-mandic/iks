@@ -444,7 +444,7 @@ function Earth_DisplayRoutes(key: string, world: GlobeInstance) {
 function Earth_Animate(earth: Earth) {
   earth.timeline.fromTo(
     '.container',
-    { translateX: '-95%' },
+    { translateX: '-150%' },
     { translateX: '0%', duration: 1.5, delay: 4.5, ease: 'power2.inOut' }
   );
 

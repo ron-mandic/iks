@@ -81,7 +81,7 @@ p[id^="year"] {
 }
 
 .sub-headline {
-  font-size: clamp(1.5rem, 150px, 1vh);
+  font-size: clamp(1rem, 150px, 1vh);
   font-weight: normal;
   margin: 0 0 2vh;
 }
@@ -93,7 +93,7 @@ p[id^="year"] {
 }
 
 header p:not(.header-total) {
-  font-size: clamp(1.5rem, 150px, 1vh);
+  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -108,13 +108,13 @@ header p:not(.header-total) {
   display: flex;
   position: relative;
   width: 100%;
-  height: 100px;
+  height: 60px;
   color: #fff;
   * {
     z-index: 2;
   }
   label {
-    font-size: 150%;
+    font-size: 100%;
   }
 }
 
@@ -176,7 +176,7 @@ footer {
 
 .chart {
   width: 100%;
-  height: clamp(300px, 15vh, 1440px);
+  height: clamp(240px, 15vh, 1440px);
   padding: 1% 1.25% 5%;
   gap: 0.25vw;
   margin: 2vh 0 5vh;
@@ -386,6 +386,7 @@ footer {
   filter: invert(0.5);
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 80%;
 }
 
 .cards {
@@ -462,12 +463,12 @@ footer {
 }
 
 h2 {
-  font-size: 200%;
+  font-size: 100%;
 }
 
 .thumbnail {
   width: 100%;
-  height: clamp(300px, 15vh, 1440px);
+  height: clamp(180px, 15vh, 1440px);
   background-size: cover;
   background-position: center center;
 }
@@ -495,7 +496,7 @@ footer a {
 // keyframes #################################################################################
 
 .clip-container {
-  hr {
+  hr:not(.divider) {
     color: #fffcc4;
     height: 2px;
     border: none;
@@ -537,8 +538,7 @@ footer a {
 }
 
 p.causes {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 100%;
   padding: 0 1rem;
   color: #e8e8e8;
   margin-bottom: 1.5rem;
@@ -555,10 +555,9 @@ p.causes {
 
 .frame p {
   width: 50%;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fffcc4;
-  letter-spacing: -0.05rem;
+  font-size: 2rem;
+  letter-spacing: -0.05em;
+  color: #fdfbf6;
 }
 
 .trigger {
@@ -589,4 +588,14 @@ p.causes {
   &:nth-child(4) {
     background-image: url("https://images.unsplash.com/photo-1551556729-c8dee4337009?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2370&q=80");
   }
+}
+
+hr.divider {
+  max-width: 440px;
+  margin: 4rem auto;
+  background-color: #fffcc4;
+}
+
+hr.divider.long {
+  max-width: 840px;
 }

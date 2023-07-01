@@ -31,6 +31,21 @@
   align-items: center;
 }
 
+.fe-c {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.sb-fs {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.c-fe {
+  justify-content: center;
+  align-items: flex-end;
+}
+
 .is-truncate {
   white-space: nowrap;
   text-overflow: ellipsis;
